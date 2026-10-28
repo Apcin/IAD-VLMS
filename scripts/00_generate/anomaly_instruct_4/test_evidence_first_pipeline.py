@@ -135,7 +135,7 @@ class EvidenceFirstTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             generation.parse_evidence(json.dumps(value), sample)
 
-    def test_collection_concurrent_merges_and_atomic_failure(self):
+    def test_collection_concurrent_appends(self):
         path = self.root / "evidence_test.json"
         context = multiprocessing.get_context("spawn")
         barrier = context.Barrier(3)
@@ -152,14 +152,77 @@ class EvidenceFirstTests(unittest.TestCase):
                     worker.terminate()
                     worker.join()
         self.assertEqual(len(store.read_records(path, "test")), 15)
+        self.assertEqual(len(json.loads(path.read_bytes())["records"]), 15)
+        with self.assertRaises(ValueError):
+            store.read_records(path, "wrong_dataset")
+
+    def test_legacy_collection_conversion_is_atomic_and_preserves_records(self):
+        path = self.root / "evidence_test.json"
+        old = {"old": {"image_id": "old", "dataset": "test"}}
+        path.write_text(json.dumps({"schema_version": "anomaly-instruct-dataset-records-v1", "dataset": "test", "records": old}))
+        self.assertEqual(store.read_records(path, "test"), old)
         original = path.read_bytes()
         with patch.object(store.os, "replace", side_effect=OSError("simulated interrupted write")):
             with self.assertRaises(OSError):
                 store.merge_records(path, "test", {"new": {"image_id": "new", "dataset": "test"}})
         self.assertEqual(path.read_bytes(), original)
         self.assertEqual(list(self.root.glob("*.tmp")), [])
-        with self.assertRaises(ValueError):
-            store.read_records(path, "wrong_dataset")
+        store.merge_records(path, "test", {"new": {"image_id": "new", "dataset": "test"}})
+        self.assertEqual(set(store.read_records(path, "test")), {"old", "new"})
+        self.assertIsInstance(json.loads(path.read_bytes())["records"], list)
+
+    def test_append_only_writes_new_bytes_and_latest_record_wins(self):
+        path = self.root / "evidence_test.json"
+        old = {"image_id": "same", "dataset": "test", "value": "旧记录\n含有 ]} 和引号\""}
+        store.merge_records(path, "test", {"same": old})
+        before, inode = path.read_bytes(), path.stat().st_ino
+        updated = {**old, "value": "new version"}
+        new = {"image_id": "new", "dataset": "test"}
+        # Appending must neither parse all old records nor replace the file.
+        with patch.object(store, "_read_unlocked", side_effect=AssertionError("full read")), \
+             patch.object(store, "_replace_snapshot", side_effect=AssertionError("full rewrite")):
+            store.merge_records(path, "test", {"same": updated, "new": new})
+        self.assertEqual(path.stat().st_ino, inode)
+        self.assertTrue(path.read_bytes().startswith(before[:-len(store.FOOTER)]))
+        self.assertEqual(store.read_records(path, "test"), {"same": updated, "new": new})
+        self.assertEqual(len(json.loads(path.read_bytes())["records"]), 3)
+
+    def test_recover_every_interrupted_append_position_for_readers_and_writers(self):
+        path = self.root / "evidence_test.json"
+        saved = {"image_id": "saved", "dataset": "test"}
+        fresh = {"image_id": "fresh", "dataset": "test", "value": "中文\n含引号\"和 ]}"}
+        later = {"image_id": "later", "dataset": "test"}
+        store.merge_records(path, "test", {"saved": saved})
+        prefix = path.read_bytes()[:-len(store.FOOTER)]
+        append = b"," + store._encode_records({"fresh": fresh}, "test") + store.FOOTER
+        with patch.object(store.logging.getLogger(store.__name__), "warning"):
+            for reader_first in (True, False):
+                for cut in range(len(append) + 1):
+                    with self.subTest(reader_first=reader_first, cut=cut):
+                        path.write_bytes(prefix + append[:cut])
+                        if reader_first:
+                            self.assertEqual(store.read_records(path, "test")["saved"], saved)
+                            json.loads(path.read_bytes())  # Recovery leaves standard JSON.
+                        store.merge_records(path, "test", {"later": later})
+                        recovered = store.read_records(path, "test")
+                        self.assertEqual(recovered["saved"], saved)
+                        self.assertEqual(recovered["later"], later)
+                        if "fresh" in recovered:
+                            self.assertEqual(recovered["fresh"], fresh)
+
+    def test_recovery_rejects_complete_corruption_without_modifying_file(self):
+        path = self.root / "evidence_test.json"
+        store.merge_records(path, "test", {"saved": {"image_id": "saved", "dataset": "test"}})
+        prefix = path.read_bytes()[:-len(store.FOOTER)]
+        invalid = [b',{"broken":!}\n', b',{"image_id":"other","dataset":"wrong"}\n']
+        for tail in invalid:
+            path.write_bytes(prefix + tail)
+            original = path.read_bytes()
+            with self.assertRaises(ValueError):
+                store.read_records(path, "test")
+            with self.assertRaises(ValueError):
+                store.merge_records(path, "test", {"new": {"image_id": "new", "dataset": "test"}})
+            self.assertEqual(path.read_bytes(), original)
 
     def test_stage1_retry_then_stage2_failure_reuses_disk_evidence(self):
         sample = self.prepared_sample()

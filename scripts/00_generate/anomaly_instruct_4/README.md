@@ -125,15 +125,16 @@ data/traces_qwen3vl8b_evidence_first/traces_<dataset>.json
 data/compiled_evidence_first/<dataset>_cot_sft.json
 ```
 
-Each evidence/trace file contains one dataset, with records indexed by the original
-sample ID. The ID is added by Python after Stage 1 generation, not sent to Stage 1:
+Each evidence/trace file contains one dataset. Records are appended to a JSON array;
+loading builds an in-memory index by the original sample ID (last record wins).
+The ID is added by Python after Stage 1 generation, not sent to Stage 1:
 
 ```json
 {
-  "schema_version": "anomaly-instruct-dataset-records-v1",
+  "schema_version": "anomaly-instruct-dataset-records-v2",
   "dataset": "mvtec_ad",
-  "records": {
-    "original_manifest_id": {
+  "records": [
+    {
       "image_id": "original_manifest_id",
       "dataset": "mvtec_ad",
       "evidence": {
@@ -144,7 +145,7 @@ sample ID. The ID is added by Python after Stage 1 generation, not sent to Stage
         }]
       }
     }
-  }
+  ]
 }
 ```
 
@@ -153,13 +154,29 @@ metadata in both collections. Only the `evidence` payload is included in Stage 2
 evidence text. Visibility is `clear`, `partial`, or `not_visible`; uncertainty may be
 null. Regional observations always identify their query `view_id`.
 
-Each accepted inference batch is merged and saved immediately, before retries or
-Stage 2. Dataset files are compact JSON to reduce storage. A persistent `.json.lock`
-file and atomic replacement prevent concurrent shards from overwriting other
-shards' results and protect the prior JSON if a write is interrupted. All shards
-must share the same output directory on a filesystem supporting POSIX file locks
-and atomic rename. Each merge rewrites its dataset JSON; this is the IO cost of
-keeping one JSON per dataset. Do not delete lock files while generators are running.
+Each accepted inference batch is appended and synced immediately, before retries
+or Stage 2. Records are compact JSON, one per physical line inside a standard JSON
+array. A normal save serializes only the new batch outside the lock, then replaces
+the closing delimiter with that batch and a new delimiter. It does not reread or
+rewrite old records. Repeated image IDs append new versions; loading uses the last
+one. This reduces normal cumulative write volume from quadratic to linear in the
+amount of generated data; reads still scan the dataset once to build its index.
+
+A persistent `.json.lock` file coordinates exclusive writes/recovery and shared
+reads. All shards must share an output directory on a filesystem supporting POSIX
+file locks. Do not delete lock files while generators are running. Every completed
+save is standard JSON. Programmatic readers must use `read_records()` while writers
+are active, since an in-place append briefly removes the closing delimiter.
+
+On an interrupted append, the next read or write repairs a missing/partial closing
+delimiter or discards an incomplete final record. Complete earlier records are
+preserved; a malformed complete line or wrong record identity raises without
+modifying the file. Tail recovery is not a guarantee against arbitrary corruption
+or power loss, and appends do not have the old full-snapshot atomicity. Legacy v1
+dictionary files remain readable and are atomically converted once on their next
+write; initialization/conversion use a temporary file that is then removed. No
+extra per-sample files or journal/database are introduced. Generation and compile
+commands are unchanged.
 
 ```bash
 cd scripts/00_generate/anomaly_instruct_4
