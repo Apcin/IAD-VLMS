@@ -1,0 +1,57 @@
+### Paths below use ${WORK_DIR} (the workspace holding LlamaFactory/, outputs/, hf_cache/)
+### and ${REPO_ROOT} (this repository). scripts/01_sft/run_sft_qwen25vl_7b_6k_noreason.sh
+### expands them into a temp copy before calling llamafactory-cli.
+### NO-REASONING (labels-only) SFT ablation.
+### Identical to sft_qwen25vl_7b_zeroshot_6k_frozen.yaml (the reported SFT-6K run, 80.16/64.78)
+### EXCEPT for `dataset` and `output_dir`. Same 6000 images, same hyperparameters, same 4 epochs.
+### Only the supervision changes: prompt asks for a bare verdict, target is <answer>Yes|No</answer>.
+### 2 GPUs -> effective batch 4*4*2 = 32 -> ~187 steps/epoch -> ckpts at 188/376/564/752
+### (the same grid as SFT-6K, so ckpt-for-ckpt comparison is like-for-like).
+
+### model
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+image_max_pixels: 262144
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+freeze_language_model: false
+
+### deepspeed
+deepspeed: ${REPO_ROOT}/configs/deepspeed/ds_z3_cpu_offload.json
+
+### dataset
+dataset: iad_sft_6k_noreason_train
+template: qwen2_vl
+cutoff_len: 12144
+preprocessing_num_workers: 4
+
+### output
+output_dir: ${WORK_DIR}/outputs/sft_qwen25vl_7b_6k_noreason
+logging_steps: 10
+save_strategy: epoch
+save_total_limit: 10
+overwrite_output_dir: true
+report_to: none
+
+# Weights only -- do NOT write DeepSpeed optimizer states (global_step*/).
+# ZeRO-3 would otherwise dump ~87GB of optimizer state per checkpoint on top of the 16GB of
+# weights; 4 checkpoints would need ~412GB and the scratch volume only had ~399GB free (shared with other
+# users' jobs). We never resume from these checkpoints, we only load the weights for eval,
+# so the optimizer state is pure waste. 16GB x 4 = 64GB instead of 412GB.
+save_only_model: true
+
+### train
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+num_train_epochs: 4
+learning_rate: 1.0e-5
+lr_scheduler_type: cosine
+warmup_steps: 20
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true

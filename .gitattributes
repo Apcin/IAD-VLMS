@@ -1,0 +1,7 @@
+scripts/00_generate/realiad_v4/config_qwen3vl.py text eol=lf
+scripts/00_generate/realiad_v4/generate_realiad_traces_qwen3vl.py text eol=lf
+scripts/00_generate/realiad_v4/requirements-qwen3vl.txt text eol=lf
+scripts/00_generate/realiad_v4/run_qwen3vl_generate.sh text eol=lf
+scripts/00_generate/realiad_v4/test_validate_structured_trace.py text eol=lf
+scripts/00_generate/realiad_v4/validate_structured_trace.py text eol=lf
+scripts/00_generate/realiad_v4/compile_traces_v4.py whitespace=-blank-at-eol

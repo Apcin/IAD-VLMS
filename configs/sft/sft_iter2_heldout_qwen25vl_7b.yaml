@@ -1,0 +1,41 @@
+### model
+model_name_or_path: /bulk/aacudad/reasoning_traces/outputs/grpo_qwen25vl_7b_6k_frozen_ep3_full_run2/checkpoint-530
+image_max_pixels: 262144
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+freeze_language_model: false
+
+### deepspeed
+deepspeed: /bulk/aacudad/reasoning_traces/Training/ds_z3_cpu_offload.json
+
+### dataset
+dataset: iad_sft_iter2_heldout
+template: qwen2_vl
+cutoff_len: 12144
+preprocessing_num_workers: 4
+
+### output
+output_dir: /bulk/aacudad/reasoning_traces/outputs/sft_qwen25vl_7b_iter2_heldout
+logging_steps: 10
+save_strategy: epoch
+save_total_limit: 10
+save_only_model: true
+overwrite_output_dir: true
+report_to: none
+
+### train
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+num_train_epochs: 4
+learning_rate: 1.0e-5
+lr_scheduler_type: cosine
+warmup_steps: 20
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true

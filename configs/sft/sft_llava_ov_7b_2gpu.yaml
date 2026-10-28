@@ -1,0 +1,48 @@
+### Paths below use ${WORK_DIR} (the workspace holding LlamaFactory/, outputs/, hf_cache/)
+### and ${REPO_ROOT} (this repository). Expand them before handing the file to
+### llamafactory-cli, e.g.
+###   sed -e "s|\${WORK_DIR}|$WORK_DIR|g" -e "s|\${REPO_ROOT}|$REPO_ROOT|g" \
+###       configs/sft/<this file> > /tmp/run.yaml && llamafactory-cli train /tmp/run.yaml
+### The launchers in scripts/01_sft/ do this for you.
+### model
+model_name_or_path: lmms-lab/llava-onevision-qwen2-7b-si
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: false
+freeze_multi_modal_projector: false
+freeze_language_model: false
+
+### deepspeed — ZeRO-3 WITHOUT CPU offload (keeps weights on GPU VRAM)
+### This ensures the vision tower weights are properly gathered and saved
+deepspeed: ${REPO_ROOT}/configs/deepspeed/ds_z3_no_offload.json
+
+### dataset
+dataset: iad_sft_small_train
+template: llava_next_qwen
+cutoff_len: 8192
+preprocessing_num_workers: 4
+
+### output
+output_dir: ${WORK_DIR}/outputs/sft_llava_ov_7b_2gpu
+logging_steps: 5
+save_steps: 100
+save_total_limit: 20
+overwrite_output_dir: false
+report_to: none
+
+### train
+# 2 GPUs × per_device_batch=1 × grad_accum=4 = effective batch 8
+# (matches IAD-R1: 4 GPUs × 1 × 2 = 8)
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4
+num_train_epochs: 1
+learning_rate: 1.0e-5
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true

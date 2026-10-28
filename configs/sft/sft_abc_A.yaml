@@ -1,0 +1,43 @@
+### Arm A — pure-kept rejection sampling (RAFT-style)
+### 2,978 items, 50/50 NG/OK, all model-correct rollouts
+### From base, 4 epochs, frozen ViT, DeepSpeed Z3 offload.
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+image_max_pixels: 262144
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+freeze_language_model: false
+
+### deepspeed
+deepspeed: /bulk/aacudad/reasoning_traces/Training/ds_z3_cpu_offload.json
+
+### dataset
+dataset: iad_sft_A_kept_balanced
+template: qwen2_vl
+cutoff_len: 12144
+preprocessing_num_workers: 4
+
+### output
+output_dir: /bulk/aacudad/reasoning_traces/outputs/sft_qwen25vl_7b_abc_A_kept
+logging_steps: 10
+save_strategy: epoch
+save_total_limit: 4
+save_only_model: true
+overwrite_output_dir: true
+report_to: none
+
+### train
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 2
+num_train_epochs: 4
+learning_rate: 1.0e-5
+lr_scheduler_type: cosine
+warmup_steps: 20
+bf16: true
+ddp_timeout: 180000000
+gradient_checkpointing: true

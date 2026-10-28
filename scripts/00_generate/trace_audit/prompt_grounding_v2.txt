@@ -1,0 +1,173 @@
+You are auditing ONE industrial-inspection reasoning trace against the images it describes.
+
+You judge GROUNDING ONLY. Grounding means: is every factual claim in the trace actually supported by
+the images you were given. Nothing else.
+
+Do NOT judge format. Tag syntax, tag order, missing or extra XML tags, length, wording, style and
+spelling are all checked elsewhere by a separate deterministic checker. They must not influence your
+verdict in any way. A trace with perfect format and a false claim is wrong. A trace with clumsy
+format and only true claims is correct.
+
+WHAT YOU RECEIVE
+The message states which images are attached, in order, before each image. It is one of these sets.
+  1. QUERY image only. The sample is labelled normal, so no defect mask exists.
+  2. QUERY image, then OVERLAY (the same query image with the ground-truth defect region filled in
+     red), then REFERENCE NORMAL (a defect-free capture of the same product from the same camera).
+  3. QUERY image, then REFERENCE NORMAL. This happens for an anomalous sample whose defect is not
+     visible in this camera view, so no mask exists for it.
+After the images you get the GOLD VERDICT, the trace text, and, when known, the ground-truth defect
+type and region.
+
+The REFERENCE NORMAL is a different physical unit. Use it only to learn what this product normally
+looks like. Never describe it as if it were the query. Never report a difference between the query
+and the reference as a defect unless you can also see that difference in the query itself.
+
+THE OVERLAY IS NOT PART OF THE PRODUCT
+The red fill in the OVERLAY image is a drawing added by us. It marks where the defect is. It is not
+paint, not a fibre, not contamination and not a red component. If the trace describes something red
+that only exists in the overlay and not in the query image, that is a false claim. Report it with
+issue_type "overlay_leak".
+
+HOW TO JUDGE A CLAIM
+Go through the trace claim by claim. A claim is any statement about what is visible: a count, a
+colour, a finish, a material, a package or component type, the camera viewpoint, the position of a
+feature, a marking or printed text, the presence or absence of dust, damage, a defect, its kind and
+its place.
+For each claim decide: supported by the images, contradicted by the images, or not checkable.
+
+COUNTING IS MANDATORY, AND YOU MUST WRITE YOUR COUNT DOWN
+Whenever the trace states a number of anything you can count in the image, count it yourself before
+you judge it. This covers pins, leads, terminals, contacts, holes, slots, teeth, beads, segments,
+screws, bricks, cells, rows, connectors and any other repeated item, and it also covers package
+names that imply a count, such as SOIC-16 or a 14-pin package.
+Count the items one by one, in the query image, left to right or top to bottom. Do not estimate. Do
+not accept the trace's number because it looks plausible. Do not accept it because it is a common
+value for this kind of part.
+For every countable claim in the trace you MUST add one entry to the "counts" array, giving what you
+counted, the number the trace states, and the number you actually counted. Fill "counts" before you
+choose a category. If "counts" is empty, you are asserting the trace states no countable quantity at
+all.
+If the image does not let you count reliably, because of blur, glare, occlusion or resolution, set
+"i_counted" to null and "sure" to false for that entry, add an issue whose "why_wrong" starts with
+the exact word UNCERTAIN_COUNT, leave "what_it_should_be" as an empty string, and use category
+"correct" unless some other claim is genuinely contradicted. Never file a count as wrong when you
+are not sure of your own count.
+Then check your own bookkeeping before you answer. For every entry in "counts" where "sure" is true
+and "i_counted" is not equal to "trace_says", you MUST add an issue with issue_type "count_error",
+and the category MUST be "wrong" or "completely_wrong". You may not write down a disagreement in
+"counts" and then call the trace completely_correct. If you decide the trace is right after all,
+change the "counts" entry, not the category.
+
+THE VERDICT IS FIXED
+The GOLD VERDICT comes from the dataset label. It is ground truth. You never change it and you never
+argue with it. If the trace concludes something other than the gold verdict, report that as an issue
+with issue_type "verdict_mismatch".
+
+WHEN THE DEFECT IS NOT VISIBLE IN THIS VIEW
+Some anomalous samples carry a defect that this camera simply does not show. You can tell: the gold
+verdict is Yes, and either the message says no overlay exists, or the overlay marks a region where
+the query image shows nothing unusual at this resolution.
+In that case you must NOT invent a defect, and you must NOT write a rewrite.
+  Set "not_visible_in_view" to true.
+  Add one issue with issue_type "not_visible_in_view" describing what the trace claims and why this
+  view cannot support the gold verdict.
+  Choose the category on the evidence as usual. If the trace concludes No against a gold verdict of
+  Yes, that is "completely_wrong".
+  Leave "corrected_trace" as the empty string. These items are routed out of the rewrite queue by
+  the pipeline. A rewrite here would have to state a defect you cannot see, and that is exactly the
+  hallucination this audit exists to remove.
+Never write a sentence such as "the unit is missing an internal component", "comparing with
+specifications", "this unit exhibits a defect" or "compared to the reference normal" in order to
+reach the gold verdict. If the only way to reach the gold verdict is to assert something you cannot
+see, then there is no rewrite, and "corrected_trace" stays empty.
+
+CATEGORIES
+Use exactly one of these four.
+  completely_correct means every factual claim is supported by the images.
+  correct means nothing is false but something is vague or cannot be checked. Use this when your own
+  count was unreliable, and when the trace hedges rather than asserts.
+  wrong means at least one claim is contradicted by the images.
+  completely_wrong means the verdict itself, or the defect that is described, is wrong.
+
+THE REWRITE
+Fill "corrected_trace" only when the category is not completely_correct AND "not_visible_in_view" is
+false. Otherwise "corrected_trace" must be the empty string.
+Rules for the rewrite.
+  Keep the same voice and the same first-person inspection style as the original.
+  Keep the same length. Stay within ten percent of the original word count. If you find yourself
+  deleting whole paragraphs, you are rewriting instead of correcting. Correct the false sentences
+  and leave the rest alone.
+  Keep the same tag structure. Reproduce every tag the original has, in the same order, with the
+  same tag names. Do not add a tag the original does not have. Do not remove a tag it does have. A
+  trace with no location tag and no type tag must come back with no location tag and no type tag.
+  If the original has a location tag, the replacement value must use the same vocabulary the
+  original used, which is a named image region such as top-left, top-center, top-right, middle-left,
+  center, middle-right, bottom-left, bottom-center, bottom-right. Never write coordinates or a
+  bounding box.
+  Keep the gold verdict inside the answer tag exactly as the gold verdict states it.
+  Change only what is unsupported. Every sentence that was already supported stays word for word.
+  Replace a wrong count with the count you actually made. If you were not able to count reliably,
+  drop the number instead of inventing one and describe the items without a figure.
+  Never add a new observation. Do not introduce any detail, feature, marking, finish or measurement
+  that is not visible in the images. The rewrite must contain fewer claims than the original, or the
+  same claims made accurate, never more.
+  The rewrite is read on its own, by someone who has only the query image. It must never mention the
+  overlay, the red region, the mask, the reference normal, the gold verdict, the dataset, the label
+  or any specification sheet. Write it as one inspector looking at one photograph.
+
+TAGS_OK
+Set "tags_ok" to true when the answer tag, the location tag and the type tag all agree with what the
+images show. Judge the location tag against where the red region actually sits, and the type tag
+against the kind of defect you can actually see. Judge only the tags the trace has. A normal trace
+has no location tag and no type tag, so for a normal trace "tags_ok" depends on the answer tag only.
+Set "tags_ok" to false when any present tag disagrees with the images.
+
+ISSUE TYPES
+Every issue must carry an "issue_type" from exactly this list.
+  count_error          a stated number of countable items is wrong
+  location_error       a real feature or defect is placed in the wrong part of the image
+  defect_type_error    the defect is real but named as the wrong kind
+  missed_defect        a defect visible in the image is not mentioned or is denied
+  invented_defect      a defect is described that the image does not show
+  feature_absent       a part, marking, hole or structure is described that does not exist here
+  viewpoint_error      the trace describes a camera view or a face that this image does not show
+  colour_finish_error  a colour, finish, texture or material is stated wrongly
+  marking_text_error   printed or etched text is quoted wrongly
+  overlay_leak         the trace describes the red overlay as if it were part of the product
+  verdict_mismatch     the answer tag disagrees with the gold verdict
+  not_visible_in_view  the gold verdict is Yes but this view shows no defect
+  other                anything the list above does not cover
+
+OUTPUT
+Return strict JSON and nothing else. No prose before it, no prose after it, no code fences.
+
+{
+  "category": "completely_correct" | "correct" | "wrong" | "completely_wrong",
+  "confidence": 0.0,
+  "not_visible_in_view": false,
+  "counts": [
+    {
+      "what": "<what you counted, for example leads on the top side>",
+      "trace_says": 0,
+      "i_counted": 0,
+      "sure": true
+    }
+  ],
+  "issues": [
+    {
+      "issue_type": "<one value from the ISSUE TYPES list>",
+      "claim": "<the words from the trace, quoted verbatim, exactly as they appear>",
+      "why_wrong": "<one short sentence, or UNCERTAIN_COUNT followed by one short sentence>",
+      "what_it_should_be": "<the accurate version of the claim, or an empty string>"
+    }
+  ],
+  "tags_ok": true,
+  "corrected_trace": ""
+}
+
+"confidence" is your confidence in your own verdict, from 0.0 to 1.0. Lower it when you could not
+count reliably or when the image quality limits you.
+"counts" is an empty list only when the trace states no countable quantity.
+"issues" is an empty list when the category is completely_correct.
+Every "claim" must be copied from the trace character for character so it can be located again by an
+exact string search. Do not paraphrase it.

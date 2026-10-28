@@ -1,0 +1,230 @@
+{
+  "iad_sft_6k_backfilled": {
+    "file_name": "${WORK_DIR}/Training/datasets_small_new_v4/combined_6k_backfilled_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_6k_noreason_train": {
+    "file_name": "${WORK_DIR}/Training/datasets_noreason/combined_6k_noreason_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_armd_pure": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_armd/sft_D_star_pure.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_armd_swap": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_armd/sft_D_star_swap.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_filtered6kcc_train": {
+    "file_name": "${WORK_DIR}/Training/datasets_small_new_v4/filtered_6k_cc_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_llava_iter1_C": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_llava_iter1/sft_llava_C_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "iad_sft_llava_iter1_C_original": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_llava_iter1/sft_llava_C_original_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "llava_iter1_A": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_llava_iter1/sft_llava_A_kept_balanced.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "llava_iter1_B": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_llava_iter1/sft_llava_B_kept_corrected.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "llava_iter1_C": {
+    "file_name": "${WORK_DIR}/Training/datasets_sft_llava_iter1/sft_llava_C_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "variety_armC_mix_3k": {
+    "file_name": "${WORK_DIR}/Training/datasets_variety/variety_armC_mix_3k.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "variety_eval_aligned_1k": {
+    "file_name": "${WORK_DIR}/Training/datasets_variety/variety_eval_aligned_1k.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "mmad_sft_train1600": {
+    "file_name": "${WORK_DIR}/repository_tu_delft_vlms/traces/mmad/run1_unbalanced_train_1600.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    },
+    "note": "image paths are relative MMAD/<key>; prepend your data root (traces/rewrite_image_paths.py)"
+  },
+  "mmad_sft_train1600_bal": {
+    "file_name": "${WORK_DIR}/repository_tu_delft_vlms/traces/mmad/run2_balanced_train_1600.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    },
+    "note": "image paths are relative MMAD/<key>; prepend your data root (traces/rewrite_image_paths.py)"
+  },
+  "mmad_sft_train_cat": {
+    "file_name": "${WORK_DIR}/repository_tu_delft_vlms/traces/mmad/one_per_product_and_defect_144.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    },
+    "note": "image paths are relative MMAD/<key>; prepend your data root (traces/rewrite_image_paths.py)"
+  },
+  "mmad_sft_train_prod": {
+    "file_name": "${WORK_DIR}/repository_tu_delft_vlms/traces/mmad/one_per_product_39.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    },
+    "note": "image paths are relative MMAD/<key>; prepend your data root (traces/rewrite_image_paths.py)"
+  }
+}

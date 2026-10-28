@@ -1,0 +1,26 @@
+# secrets — never commit
+.env
+*key*.json
+vertexai-*.json
+*.pem
+
+# large / regenerable artifacts
+*.safetensors
+*.pt
+*.bin
+hf_cache/
+data/
+scripts/00_generate/realiad_v4/models/
+scripts/00_generate/realiad_v4/logs/
+*.zip
+*.bak
+
+# python
+__pycache__/
+*.pyc
+logs/
+scripts/00_generate/anomaly_instruct_4/data/
+scripts/00_generate/anomaly_instruct_4/logs/
+docs/interactive
+docs/trace_viewers
+traces/

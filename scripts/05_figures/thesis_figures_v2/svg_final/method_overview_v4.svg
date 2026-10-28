@@ -1,0 +1,259 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Verdana, Geneva, Arial, sans-serif" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpjNDE5YWRiZi05ZWNjLTRiZjAtOGM5Yi1jZDk3YTQ1NGUzZjQAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaGlnWAG7EnHH4JfoTF0bNcgAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDplOGY1MzRiNC01NGU5LTRkZjUtOGQwNy0xZWExNDBiOWZkODRscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoPFN/nvT6h3ZMANe8QgF3tQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggCrrQ4Hy6yYzaOWAUph5IHTj5oIjnRqkK34WSr1MTn8+kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaILX6HDrRwU8jK3f8U5LcAYAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCDA6EzYbBXW8/qjj7sLPMcon1Fffe05wO9MIZwCzx9lamRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBjLZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmM0MTlhZGJmLTllY2MtNGJmMC04YzliLWNkOTdhNDU0ZTNmNC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjg2MzZlNTNjLTAxZmQtNDIzNy04ZmNmLWRjZDE1ODFjMmM3OXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAKutDgfLrJjNo5YBSmHkgdOPmgiOdGqQrfhZKvUxOfz6JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggk2uqybf/VlWNy/Tym0SK+YwtNs81UIPiKDmGeBiOxuuiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggy8zqThUYSHJgxoPZ0uAVw1tLFz2JV8R40sgA+4jSoLd0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQH0CtWQn82bcKbl68nuB5GTO1WUvKWhZSQa+EiEOk1GfoQhZ9wzmmWawBIAjt64+PEB1e5KtyiieqaMR60drfCc=</c2pa:manifest></metadata>
+<defs>
+<marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5B7FC7"/></marker>
+<marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7BB661"/></marker>
+<marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9B7FC4"/></marker>
+<marker id="arrOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#E0925A"/></marker>
+<symbol id="snow" viewBox="0 0 12 12"><path style="fill:none;stroke:#3d7dab;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1" d="m10.33 5.377-1.625-.939V2.562M1.67 6.623l1.625.939v1.876m4.33-7.5L6 2.877l-1.625-.939m0 8.124L6 9.123l1.625.939M10.33 3.5l-1.625.938L1.67 8.5m1.625-5.938v1.876l-1.625.939m7.035 4.061V7.562l1.625-.939M6 1v10M1.67 3.5l1.625.938L10.33 8.5"/></symbol><symbol id="gemini" viewBox="0 0 65 65"><mask id="gem1_maskme" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="65" height="65"><path d="M32.447 0c.68 0 1.273.465 1.439 1.125a38.904 38.904 0 001.999 5.905c2.152 5 5.105 9.376 8.854 13.125 3.751 3.75 8.126 6.703 13.125 8.855a38.98 38.98 0 005.906 1.999c.66.166 1.124.758 1.124 1.438 0 .68-.464 1.273-1.125 1.439a38.902 38.902 0 00-5.905 1.999c-5 2.152-9.375 5.105-13.125 8.854-3.749 3.751-6.702 8.126-8.854 13.125a38.973 38.973 0 00-2 5.906 1.485 1.485 0 01-1.438 1.124c-.68 0-1.272-.464-1.438-1.125a38.913 38.913 0 00-2-5.905c-2.151-5-5.103-9.375-8.854-13.125-3.75-3.749-8.125-6.702-13.125-8.854a38.973 38.973 0 00-5.905-2A1.485 1.485 0 010 32.448c0-.68.465-1.272 1.125-1.438a38.903 38.903 0 005.905-2c5-2.151 9.376-5.104 13.125-8.854 3.75-3.749 6.703-8.125 8.855-13.125a38.972 38.972 0 001.999-5.905A1.485 1.485 0 0132.447 0z" fill="#000"/><path d="M32.447 0c.68 0 1.273.465 1.439 1.125a38.904 38.904 0 001.999 5.905c2.152 5 5.105 9.376 8.854 13.125 3.751 3.75 8.126 6.703 13.125 8.855a38.98 38.98 0 005.906 1.999c.66.166 1.124.758 1.124 1.438 0 .68-.464 1.273-1.125 1.439a38.902 38.902 0 00-5.905 1.999c-5 2.152-9.375 5.105-13.125 8.854-3.749 3.751-6.702 8.126-8.854 13.125a38.973 38.973 0 00-2 5.906 1.485 1.485 0 01-1.438 1.124c-.68 0-1.272-.464-1.438-1.125a38.913 38.913 0 00-2-5.905c-2.151-5-5.103-9.375-8.854-13.125-3.75-3.749-8.125-6.702-13.125-8.854a38.973 38.973 0 00-5.905-2A1.485 1.485 0 010 32.448c0-.68.465-1.272 1.125-1.438a38.903 38.903 0 005.905-2c5-2.151 9.376-5.104 13.125-8.854 3.75-3.749 6.703-8.125 8.855-13.125a38.972 38.972 0 001.999-5.905A1.485 1.485 0 0132.447 0z" fill="url(#gem1_prefix__paint0_linear_2001_67)"/></mask><g mask="url(#gem1_maskme)"><g filter="url(#gem1_prefix__filter0_f_2001_67)"><path d="M-5.859 50.734c7.498 2.663 16.116-2.33 19.249-11.152 3.133-8.821-.406-18.131-7.904-20.794-7.498-2.663-16.116 2.33-19.25 11.151-3.132 8.822.407 18.132 7.905 20.795z" fill="#FFE432"/></g><g filter="url(#gem1_prefix__filter1_f_2001_67)"><path d="M27.433 21.649c10.3 0 18.651-8.535 18.651-19.062 0-10.528-8.35-19.062-18.651-19.062S8.78-7.94 8.78 2.587c0 10.527 8.35 19.062 18.652 19.062z" fill="#FC413D"/></g><g filter="url(#gem1_prefix__filter2_f_2001_67)"><path d="M20.184 82.608c10.753-.525 18.918-12.244 18.237-26.174-.68-13.93-9.95-24.797-20.703-24.271C6.965 32.689-1.2 44.407-.519 58.337c.681 13.93 9.95 24.797 20.703 24.271z" fill="#00B95C"/></g><g filter="url(#gem1_prefix__filter3_f_2001_67)"><path d="M20.184 82.608c10.753-.525 18.918-12.244 18.237-26.174-.68-13.93-9.95-24.797-20.703-24.271C6.965 32.689-1.2 44.407-.519 58.337c.681 13.93 9.95 24.797 20.703 24.271z" fill="#00B95C"/></g><g filter="url(#gem1_prefix__filter4_f_2001_67)"><path d="M30.954 74.181c9.014-5.485 11.427-17.976 5.389-27.9-6.038-9.925-18.241-13.524-27.256-8.04-9.015 5.486-11.428 17.977-5.39 27.902 6.04 9.924 18.242 13.523 27.257 8.038z" fill="#00B95C"/></g><g filter="url(#gem1_prefix__filter5_f_2001_67)"><path d="M67.391 42.993c10.132 0 18.346-7.91 18.346-17.666 0-9.757-8.214-17.667-18.346-17.667s-18.346 7.91-18.346 17.667c0 9.757 8.214 17.666 18.346 17.666z" fill="#3186FF"/></g><g filter="url(#gem1_prefix__filter6_f_2001_67)"><path d="M-13.065 40.944c9.33 7.094 22.959 4.869 30.442-4.972 7.483-9.84 5.987-23.569-3.343-30.663C4.704-1.786-8.924.439-16.408 10.28c-7.483 9.84-5.986 23.57 3.343 30.664z" fill="#FBBC04"/></g><g filter="url(#gem1_prefix__filter7_f_2001_67)"><path d="M34.74 51.43c11.135 7.656 25.896 5.524 32.968-4.764 7.073-10.287 3.779-24.832-7.357-32.488C49.215 6.52 34.455 8.654 27.382 18.94c-7.072 10.288-3.779 24.833 7.357 32.49z" fill="#3186FF"/></g><g filter="url(#gem1_prefix__filter8_f_2001_67)"><path d="M54.984-2.336c2.833 3.852-.808 11.34-8.131 16.727-7.324 5.387-15.557 6.631-18.39 2.78-2.833-3.853.807-11.342 8.13-16.728 7.324-5.387 15.558-6.631 18.39-2.78z" fill="#749BFF"/></g><g filter="url(#gem1_prefix__filter9_f_2001_67)"><path d="M31.727 16.104C43.053 5.598 46.94-8.626 40.41-15.666c-6.53-7.04-21.006-4.232-32.332 6.274s-15.214 24.73-8.683 31.77c6.53 7.04 21.006 4.232 32.332-6.274z" fill="#FC413D"/></g><g filter="url(#gem1_prefix__filter10_f_2001_67)"><path d="M8.51 53.838c6.732 4.818 14.46 5.55 17.262 1.636 2.802-3.915-.384-10.994-7.116-15.812-6.731-4.818-14.46-5.55-17.261-1.636-2.802 3.915.383 10.994 7.115 15.812z" fill="#FFEE48"/></g></g><defs><filter id="gem1_prefix__filter0_f_2001_67" x="-19.824" y="13.152" width="39.274" height="43.217" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="2.46" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter1_f_2001_67" x="-15.001" y="-40.257" width="84.868" height="85.688" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="11.891" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter2_f_2001_67" x="-20.776" y="11.927" width="79.454" height="90.916" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter3_f_2001_67" x="-20.776" y="11.927" width="79.454" height="90.916" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter4_f_2001_67" x="-19.845" y="15.459" width="79.731" height="81.505" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter5_f_2001_67" x="29.832" y="-11.552" width="75.117" height="73.758" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="9.606" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter6_f_2001_67" x="-38.583" y="-16.253" width="78.135" height="78.758" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="8.706" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter7_f_2001_67" x="8.107" y="-5.966" width="78.877" height="77.539" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="7.775" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter8_f_2001_67" x="13.587" y="-18.488" width="56.272" height="51.81" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="6.957" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter9_f_2001_67" x="-15.526" y="-31.297" width="70.856" height="69.306" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="5.876" result="effect1_foregroundBlur_2001_67"/></filter><filter id="gem1_prefix__filter10_f_2001_67" x="-14.168" y="20.964" width="55.501" height="51.571" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="7.273" result="effect1_foregroundBlur_2001_67"/></filter><linearGradient id="gem1_prefix__paint0_linear_2001_67" x1="18.447" y1="43.42" x2="52.153" y2="15.004" gradientUnits="userSpaceOnUse"><stop stop-color="#4893FC"/><stop offset=".27" stop-color="#4893FC"/><stop offset=".777" stop-color="#969DFF"/><stop offset="1" stop-color="#BD99FE"/></linearGradient></defs></symbol><symbol id="qwen" viewBox="0 0 200 200">
+<path d="M174.82 108.75L155.38 75L165.64 57.75C166.46 56.31 166.46 54.53 165.64 53.09L155.38 35.84C154.86 34.91 153.87 34.33 152.78 34.33H114.88L106.14 19.03C105.62 18.1 104.63 17.52 103.54 17.52H83.3C82.21 17.52 81.22 18.1 80.7 19.03L61.26 52.77H41.02C39.93 52.77 38.94 53.35 38.42 54.28L28.16 71.53C27.34 72.97 27.34 74.75 28.16 76.19L45.52 107.5L36.78 122.8C35.96 124.24 35.96 126.02 36.78 127.46L47.04 144.71C47.56 145.64 48.55 146.22 49.64 146.22H87.54L96.28 161.52C96.8 162.45 97.79 163.03 98.88 163.03H119.12C120.21 163.03 121.2 162.45 121.72 161.52L141.16 127.78H158.52C159.61 127.78 160.6 127.2 161.12 126.27L171.38 109.02C172.2 107.58 172.2 105.8 171.38 104.36L174.82 108.75Z" fill="url(#qwen_paint0_radial)"/>
+<path d="M119.12 163.03H98.88L87.54 144.71H49.64L61.26 126.39H80.7L38.42 55.29H61.26L83.3 19.03L93.56 37.35L83.3 55.29H161.58L151.32 72.54L170.76 106.28H151.32L141.16 88.34L101.18 163.03H119.12Z" fill="white"/>
+<path d="M127.86 79.83H76.14L101.18 122.11L127.86 79.83Z" fill="url(#qwen_paint1_radial)"/>
+<defs>
+<radialGradient id="qwen_paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 100) rotate(90) scale(100)">
+<stop stop-color="#665CEE"/>
+<stop offset="1" stop-color="#332E91"/>
+</radialGradient>
+<radialGradient id="qwen_paint1_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 100) rotate(90) scale(100)">
+<stop stop-color="#665CEE"/>
+<stop offset="1" stop-color="#332E91"/>
+</radialGradient>
+</defs>
+</symbol><symbol id="db" viewBox="0 0 120 80">
+  
+
+  <defs>
+    <!-- one database cylinder, drawn once and reused -->
+    <g id="db1_db" fill="none" stroke="#2f3b4a" stroke-width="3" stroke-linecap="round">
+      <ellipse cx="0" cy="-12" rx="14" ry="5" fill="#ffffff"/>
+      <path d="M-14 -12 v24 a14 5 0 0 0 28 0 v-24"/>
+      <path d="M-14 -4 a14 5 0 0 0 28 0"/>
+      <path d="M-14 4 a14 5 0 0 0 28 0"/>
+    </g>
+  </defs>
+
+  <!-- top -->
+  <use href="#db1_db" x="60" y="24"/>
+  <!-- bottom left and right -->
+  <use href="#db1_db" x="42" y="56"/>
+  <use href="#db1_db" x="78" y="56"/>
+</symbol><symbol id="robot" viewBox="0 0 120 80">
+  <!-- background -->
+  
+
+  <!-- side antenna wires and balls -->
+  <line x1="32" y1="24" x2="26" y2="10" stroke="#3b4a5a" stroke-width="1.5"/>
+  <line x1="88" y1="24" x2="94" y2="10" stroke="#3b4a5a" stroke-width="1.5"/>
+  <circle cx="26" cy="9" r="3" fill="#e8474c"/>
+  <circle cx="94" cy="9" r="3" fill="#e8474c"/>
+
+  <!-- top dome -->
+  <path d="M52 16 h16 v-4 a8 8 0 0 0 -16 0 z" fill="#e8474c"/>
+
+  <!-- ear bolts -->
+  <rect x="22" y="36" width="8" height="18" rx="2" fill="#7a8b99"/>
+  <rect x="90" y="36" width="8" height="18" rx="2" fill="#7a8b99"/>
+  <circle cx="26" cy="45" r="1.5" fill="#3b4a5a"/>
+  <circle cx="94" cy="45" r="1.5" fill="#3b4a5a"/>
+
+  <!-- head -->
+  <rect x="30" y="16" width="60" height="56" rx="10" fill="#8dbbdd" stroke="#3b4a5a" stroke-width="1.5"/>
+
+  <!-- eyes -->
+  <circle cx="48" cy="38" r="7" fill="#fff" stroke="#3b4a5a" stroke-width="1.5"/>
+  <circle cx="72" cy="38" r="7" fill="#fff" stroke="#3b4a5a" stroke-width="1.5"/>
+  <circle cx="49" cy="39" r="3" fill="#3b4a5a"/>
+  <circle cx="73" cy="39" r="3" fill="#3b4a5a"/>
+
+  <!-- mouth with teeth grid -->
+  <rect x="42" y="52" width="36" height="12" rx="3" fill="#fff" stroke="#3b4a5a" stroke-width="1.5"/>
+  <line x1="42" y1="58" x2="78" y2="58" stroke="#3b4a5a" stroke-width="1"/>
+  <line x1="50" y1="52" x2="50" y2="64" stroke="#3b4a5a" stroke-width="1"/>
+  <line x1="58" y1="52" x2="58" y2="64" stroke="#3b4a5a" stroke-width="1"/>
+  <line x1="66" y1="52" x2="66" y2="64" stroke="#3b4a5a" stroke-width="1"/>
+  <line x1="74" y1="52" x2="74" y2="64" stroke="#3b4a5a" stroke-width="1"/>
+</symbol></defs>
+<rect width="1600" height="1000" fill="#fff"/>
+<rect x="40" y="60" width="310" height="640" rx="40" fill="#E8F0FA" stroke="#5B7FC7" stroke-width="2.5"/>
+<text x="195.0" y="100" text-anchor="middle" font-size="24" fill="#111" font-weight="bold">0  Data and traces</text>
+<rect x="56" y="124" width="278" height="64" rx="12" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<use href="#db" x="62" y="128" width="64" height="56"/>
+<text x="138" y="148" text-anchor="start" font-size="16" fill="#111" font-weight="bold">Real-IAD</text>
+<text x="138" y="170" text-anchor="start" font-size="12" fill="#111">30 products, top-down view C1</text>
+<path d="M195.0 188 L195.0 206" fill="none" stroke="#5B7FC7" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrBlue)"/>
+<rect x="56" y="210" width="278" height="120" rx="12" fill="#F3F7FC" stroke="#5B7FC7" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="195.0" y="232" text-anchor="middle" font-size="14" fill="#111" font-weight="bold">Privileged input, teacher only</text>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="83.0" y="248" width="42" height="30" rx="4"/><circle cx="104.0" cy="263" r="8"/><path d="M93.0 248 l4 -7 h14 l4 7"/></g>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M173.0 256 l22 -11 l22 11 l-22 11 z"/><path d="M173.0 267 l22 11 l22 -11"/><path d="M173.0 276 l22 11 l22 -11"/></g>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="251.0" y="246" width="30" height="30" rx="4"/><rect x="262.0" y="256" width="30" height="30" rx="4" fill="#F3F7FC"/></g>
+<text x="104.0" y="312" text-anchor="middle" font-size="12" fill="#111">query</text>
+<text x="195.0" y="312" text-anchor="middle" font-size="12" fill="#111">mask overlay</text>
+<text x="279.0" y="312" text-anchor="middle" font-size="12" fill="#111">reference</text>
+<path d="M195.0 330 L195.0 348" fill="none" stroke="#5B7FC7" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrBlue)"/>
+<rect x="56" y="352" width="278" height="58" rx="12" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<use href="#gemini" x="66" y="357" width="48" height="48"/>
+<text x="126" y="376" text-anchor="start" font-size="15" fill="#111" font-weight="bold">Gemini 2.5-Flash</text>
+<text x="126" y="396" text-anchor="start" font-size="13" fill="#111">writes the trace</text>
+<path d="M195.0 410 L195.0 428" fill="none" stroke="#5B7FC7" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrBlue)"/>
+<rect x="56" y="432" width="278" height="96" rx="12" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<use href="#db" x="62" y="436" width="64" height="54"/>
+<text x="138" y="456" text-anchor="start" font-size="15" fill="#111" font-weight="bold">AnomalyThink</text>
+<text x="138" y="476" text-anchor="start" font-size="13" fill="#111">14,472 traces</text>
+<rect x="200" y="419" width="134" height="26" rx="13" fill="#5B7FC7" stroke="#fff" stroke-width="2"/>
+<text x="267" y="437" text-anchor="middle" font-size="12" fill="#fff" font-weight="bold">proposed dataset</text>
+<rect x="68" y="488" width="254" height="32" rx="6" fill="#F7F7F7" stroke="#DDDDDD" stroke-width="1"/>
+<text x="195.0" y="509" text-anchor="middle" font-size="11" fill="#111" font-family="Consolas, DejaVu Sans Mono, monospace">&lt;think&gt; &lt;location&gt; &lt;type&gt; &lt;answer&gt;</text>
+<path d="M195.0 528 L195.0 546" fill="none" stroke="#5B7FC7" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrBlue)"/>
+<rect x="56" y="550" width="278" height="34" rx="8" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<text x="70" y="573" text-anchor="start" font-size="14" fill="#111">SFT split</text>
+<text x="320" y="573" text-anchor="end" font-size="14" fill="#111" font-weight="bold">6,000</text>
+<rect x="56" y="592" width="278" height="34" rx="8" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<text x="70" y="615" text-anchor="start" font-size="14" fill="#111">GRPO split</text>
+<text x="320" y="615" text-anchor="end" font-size="14" fill="#111" font-weight="bold">4,236</text>
+<rect x="56" y="634" width="278" height="34" rx="8" fill="#fff" stroke="#B9C6E8" stroke-width="1.5"/>
+<text x="70" y="657" text-anchor="start" font-size="14" fill="#111">held-out</text>
+<text x="320" y="657" text-anchor="end" font-size="14" fill="#111" font-weight="bold">4,236</text>
+<rect x="390" y="60" width="290" height="640" rx="40" fill="#E6F3E0" stroke="#7BB661" stroke-width="2.5"/>
+<text x="535.0" y="100" text-anchor="middle" font-size="24" fill="#111" font-weight="bold">1  SFT</text>
+<rect x="406" y="124" width="258" height="116" rx="16" fill="#F3F9EE" stroke="#7BB661" stroke-width="2" stroke-dasharray="8 6"/>
+<use href="#qwen" x="501.0" y="128" width="68" height="68"/>
+<text x="535.0" y="214" text-anchor="middle" font-size="15" fill="#111" font-weight="bold">Qwen2.5-VL-7B</text>
+<text x="535.0" y="232" text-anchor="middle" font-size="12" fill="#111">base weights, 69.08 / 53.79</text>
+<path d="M535.0 240 L535.0 260" fill="none" stroke="#7BB661" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrGreen)"/>
+<rect x="406" y="264" width="258" height="262" rx="16" fill="#F3F9EE" stroke="#7BB661" stroke-width="2" stroke-dasharray="8 6"/>
+<use href="#snow" x="511.0" y="272" width="48" height="48"/>
+<text x="535.0" y="338" text-anchor="middle" font-size="19" fill="#111" font-weight="bold">Supervised</text>
+<text x="535.0" y="360" text-anchor="middle" font-size="19" fill="#111" font-weight="bold">fine-tuning</text>
+<rect x="422" y="376" width="226" height="134" rx="10" fill="#fff" stroke="#8FC46E" stroke-width="1.5"/>
+<text x="535.0" y="400" text-anchor="middle" font-size="15" fill="#111" font-weight="bold">AnomalyThink-6K</text>
+<text x="535.0" y="424" text-anchor="middle" font-size="14" fill="#111">frozen vision encoder</text>
+<text x="535.0" y="446" text-anchor="middle" font-size="14" fill="#111">4 epochs, lr 1e-5</text>
+<line x1="440" y1="460" x2="630" y2="460" stroke="#DDDDDD"/>
+<g fill="none" stroke="#111" stroke-width="2"><path d="M471.0 482c6-9 20-9 26 0c-6 9-20 9-26 0z"/><circle cx="484.0" cy="482" r="3.5" fill="#111"/></g>
+<text x="503.0" y="487" text-anchor="start" font-size="13" fill="#111">sees one image only</text>
+<path d="M535.0 526 L535.0 548" fill="none" stroke="#7BB661" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrGreen)"/>
+<rect x="414" y="552" width="242" height="68" rx="10" fill="#fff" stroke="#8FC46E" stroke-width="1.5"/>
+<use href="#robot" x="420" y="566" width="60" height="40"/>
+<text x="486" y="580" text-anchor="start" font-size="12" fill="#555">output:</text>
+<text x="486" y="600" text-anchor="start" font-size="15" fill="#111" font-weight="bold">the 6K SFT model</text>
+<rect x="710" y="60" width="380" height="640" rx="40" fill="#EFE9F5" stroke="#9B7FC4" stroke-width="2.5"/>
+<text x="900.0" y="100" text-anchor="middle" font-size="24" fill="#111" font-weight="bold">2  GRPO</text>
+<rect x="726" y="124" width="348" height="316" rx="16" fill="#F6F2FA" stroke="#9B7FC4" stroke-width="2" stroke-dasharray="8 6"/>
+<use href="#robot" x="738" y="136" width="80" height="54"/>
+<text x="830" y="152" text-anchor="start" font-size="16" fill="#111" font-weight="bold">GRPO</text>
+<text x="830" y="170" text-anchor="start" font-size="13" fill="#111">reinforcement learning</text>
+<text x="830" y="188" text-anchor="start" font-size="12" fill="#111">the 4,236 GRPO split prompts</text>
+<text x="830" y="204" text-anchor="start" font-size="12" fill="#111">G = 4, 2 epochs</text>
+<text x="740" y="238" text-anchor="start" font-size="14" fill="#111" font-weight="bold">reward =</text>
+<rect x="822.0" y="218" width="52.0" height="48" rx="8" fill="#fff" stroke="#CDBBE3" stroke-width="1.5"/>
+<text x="848.0" y="238" text-anchor="middle" font-size="13" fill="#111">format</text>
+<text x="848.0" y="257" text-anchor="middle" font-size="12" fill="#111">&#215; 1.0</text>
+<rect x="884.0" y="218" width="52.0" height="48" rx="8" fill="#fff" stroke="#CDBBE3" stroke-width="1.5"/>
+<text x="910.0" y="238" text-anchor="middle" font-size="13" fill="#111">verdict</text>
+<text x="910.0" y="257" text-anchor="middle" font-size="12" fill="#111">&#215; 1.0</text>
+<rect x="946.0" y="218" width="52.0" height="48" rx="8" fill="#FBF8FD" stroke="#CDBBE3" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="972.0" y="238" text-anchor="middle" font-size="13" fill="#111">type</text>
+<text x="972.0" y="257" text-anchor="middle" font-size="12" fill="#111">&#215; 0.5</text>
+<rect x="1008.0" y="218" width="52.0" height="48" rx="8" fill="#FBF8FD" stroke="#CDBBE3" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="1034.0" y="238" text-anchor="middle" font-size="13" fill="#111">location</text>
+<text x="1034.0" y="257" text-anchor="middle" font-size="12" fill="#111">&#215; 0.5</text>
+<path d="M946.0 272 v6 h114.0 v-6" fill="none" stroke="#9B7FC4" stroke-width="1.5"/>
+<text x="1003.0" y="292" text-anchor="middle" font-size="11" fill="#4a3a66">anomalous samples only</text>
+<text x="900.0" y="310" text-anchor="middle" font-size="11" fill="#4a3a66">max 2.0 for a normal sample, 3.0 for an anomalous one</text>
+<text x="900.0" y="332" text-anchor="middle" font-size="13" fill="#111" font-style="italic">scores the tags, never the reasoning text</text>
+<rect x="740" y="346" width="320" height="80" rx="10" fill="#fff" stroke="#CDBBE3" stroke-width="1.5"/>
+<text x="900.0" y="372" text-anchor="middle" font-size="13" fill="#111">learns from its own rollouts</text>
+<text x="900.0" y="392" text-anchor="middle" font-size="13" fill="#111">no teacher, no traces</text>
+<text x="900.0" y="412" text-anchor="middle" font-size="13" fill="#111">initialised from the 6K SFT model</text>
+<path d="M900.0 440 L900.0 548" fill="none" stroke="#9B7FC4" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrPurple)"/>
+<rect x="766" y="552" width="268" height="68" rx="10" fill="#fff" stroke="#CDBBE3" stroke-width="1.5"/>
+<use href="#qwen" x="776" y="560" width="52" height="52"/>
+<text x="836" y="580" text-anchor="start" font-size="12" fill="#555">output:</text>
+<text x="836" y="600" text-anchor="start" font-size="15" fill="#111" font-weight="bold">the SFT + GRPO model</text>
+<rect x="1120" y="60" width="440" height="640" rx="40" fill="#FDEFE3" stroke="#E0925A" stroke-width="2.5"/>
+<text x="1340.0" y="100" text-anchor="middle" font-size="24" fill="#111" font-weight="bold">3  KCR</text>
+<rect x="1136" y="124" width="408" height="500" rx="16" fill="#FDF6F0" stroke="#E0925A" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="1152" y="152" text-anchor="start" font-size="16" fill="#111" font-weight="bold">Keep, correct, rewrite</text>
+<rect x="1386" y="134" width="142" height="26" rx="13" fill="#E0925A" stroke="#E0925A" stroke-width="1.5"/>
+<text x="1457" y="152" text-anchor="middle" font-size="13" fill="#fff" font-weight="bold">proposed method</text>
+<rect x="1154" y="170" width="372" height="44" rx="10" fill="#fff" stroke="#F0C4A0" stroke-width="1.5"/>
+<use href="#robot" x="1162" y="174" width="54" height="36"/>
+<text x="1222" y="192" text-anchor="start" font-size="13" fill="#111" font-weight="bold">roll out the SFT + GRPO model</text>
+<text x="1222" y="207" text-anchor="start" font-size="12" fill="#111">k = 8 over 10,236 images</text>
+<path d="M1340.0 214 L1340.0 232" fill="none" stroke="#E0925A" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1154" y="236" width="372" height="44" rx="10" fill="#fff" stroke="#F0C4A0" stroke-width="1.5"/>
+<use href="#gemini" x="1166" y="240" width="36" height="36"/>
+<text x="1212" y="264" text-anchor="start" font-size="13" fill="#111">a teacher judge routes every rollout</text>
+<path d="M1340.0 280 L1340.0 292 L1212.0 292 L1212.0 306" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1154.0" y="310" width="116.0" height="76" rx="10" fill="#d5ecd5" stroke="#8fc58f" stroke-width="1.5"/>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="1212.0" cy="332" r="11"/><path d="M1207.0 332 l4 4 l7 -8"/></g>
+<text x="1212.0" y="364" text-anchor="middle" font-size="14" fill="#111" font-weight="bold">keep</text>
+<text x="1212.0" y="380" text-anchor="middle" font-size="12" fill="#111">3,557</text>
+<path d="M1212.0 386 L1212.0 398 L1340.0 398 L1340.0 410" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<path d="M1340.0 280 L1340.0 292 L1340.0 292 L1340.0 306" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1282.0" y="310" width="116.0" height="76" rx="10" fill="#fdf1c2" stroke="#dbbf59" stroke-width="1.5"/>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1331.0 341 l2 -7 l14 -14 l5 5 l-14 14 z"/><path d="M1342.0 325 l5 5"/></g>
+<text x="1340.0" y="364" text-anchor="middle" font-size="14" fill="#111" font-weight="bold">correct</text>
+<text x="1340.0" y="380" text-anchor="middle" font-size="12" fill="#111">812</text>
+<path d="M1340.0 386 L1340.0 398 L1340.0 398 L1340.0 410" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<path d="M1340.0 280 L1340.0 292 L1468.0 292 L1468.0 306" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1410.0" y="310" width="116.0" height="76" rx="10" fill="#f8d2d1" stroke="#d98080" stroke-width="1.5"/>
+<g fill="none" stroke="#111" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1457.0 328 a12 12 0 0 1 21 -3"/><path d="M1478.0 318 v8 h-8"/><path d="M1479.0 336 a12 12 0 0 1 -21 3"/><path d="M1458.0 346 v-8 h8"/></g>
+<text x="1468.0" y="364" text-anchor="middle" font-size="14" fill="#111" font-weight="bold">rewrite</text>
+<text x="1468.0" y="380" text-anchor="middle" font-size="12" fill="#111">1,631</text>
+<path d="M1468.0 386 L1468.0 398 L1340.0 398 L1340.0 410" fill="none" stroke="#E0925A" stroke-width="3" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1154" y="414" width="372" height="58" rx="10" fill="#fff" stroke="#F0C4A0" stroke-width="1.5"/>
+<use href="#db" x="1164" y="416" width="60" height="54"/>
+<text x="1232" y="438" text-anchor="start" font-size="14" fill="#111" font-weight="bold">new corpus: 6,000 traces</text>
+<text x="1232" y="458" text-anchor="start" font-size="13" fill="#111">on the same 6,000 SFT images</text>
+<path d="M1340.0 472 L1340.0 490" fill="none" stroke="#E0925A" stroke-width="4" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<rect x="1154" y="494" width="372" height="112" rx="10" fill="#fff" stroke="#F0C4A0" stroke-width="1.5"/>
+<use href="#qwen" x="1166" y="510" width="66" height="66"/>
+<text x="1244" y="524" text-anchor="start" font-size="15" fill="#111" font-weight="bold">SFT a fresh model</text>
+<text x="1244" y="546" text-anchor="start" font-size="13" fill="#111">from the base weights,</text>
+<text x="1244" y="564" text-anchor="start" font-size="13" fill="#111">not from the GRPO checkpoint</text>
+<text x="1244" y="586" text-anchor="start" font-size="13" fill="#555">the GRPO model only supplies the rollouts</text>
+<rect x="40" y="740" width="1520" height="232" rx="40" fill="#F5F5F5" stroke="#8a8a8a" stroke-width="2.5" stroke-dasharray="8 6"/>
+<text x="365" y="774" text-anchor="middle" font-size="22" fill="#111" font-weight="bold">Evaluation</text>
+<rect x="56" y="794" width="278" height="156" rx="12" fill="#fff" stroke="#8a8a8a" stroke-width="2"/>
+<g fill="none" stroke="#111" stroke-width="2"><circle cx="86" cy="822" r="14"/><circle cx="86" cy="822" r="8"/><circle cx="86" cy="822" r="2.2" fill="#111"/></g>
+<text x="112" y="818" text-anchor="start" font-size="15" fill="#111" font-weight="bold">MMAD benchmark</text>
+<text x="112" y="836" text-anchor="start" font-size="12" fill="#111">zero-shot, no Real-IAD data</text>
+<text x="74" y="862" text-anchor="start" font-size="12" fill="#111">DS-MVTec</text>
+<text x="316" y="862" text-anchor="end" font-size="12" fill="#111">1,670 images</text>
+<text x="74" y="880" text-anchor="start" font-size="12" fill="#111">VisA</text>
+<text x="316" y="880" text-anchor="end" font-size="12" fill="#111">2,141 images</text>
+<line x1="74" y1="890" x2="316" y2="890" stroke="#DDDDDD"/>
+<text x="74" y="906" text-anchor="start" font-size="12" fill="#555">Gemini 2.5-Flash</text>
+<text x="316" y="906" text-anchor="end" font-size="12" fill="#555">81.52 / 75.18</text>
+<text x="74" y="921" text-anchor="start" font-size="12" fill="#555">IAD-R1</text>
+<text x="316" y="921" text-anchor="end" font-size="12" fill="#555">81.92 / 71.34</text>
+<text x="74" y="936" text-anchor="start" font-size="12" fill="#555">LLaVA 7B (base)</text>
+<text x="316" y="936" text-anchor="end" font-size="12" fill="#555">75.66 / 53.80</text>
+<rect x="406" y="794" width="258" height="156" rx="12" fill="#fff" stroke="#7BB661" stroke-width="2.5"/>
+<text x="535.0" y="822" text-anchor="middle" font-size="15" fill="#111" font-weight="bold">the 6K SFT model</text>
+<text x="424" y="862" text-anchor="start" font-size="13" fill="#555">Qwen:</text>
+<text x="646" y="862" text-anchor="end" font-size="20" fill="#111" font-weight="bold">80.16 / 64.78</text>
+<text x="424" y="898" text-anchor="start" font-size="13" fill="#555">LLaVA:</text>
+<text x="646" y="898" text-anchor="end" font-size="20" fill="#111" font-weight="bold">85.91 / 68.26</text>
+<text x="535.0" y="930" text-anchor="middle" font-size="12" fill="#555">SFT only</text>
+<rect x="726" y="794" width="348" height="156" rx="12" fill="#fff" stroke="#9B7FC4" stroke-width="2.5"/>
+<text x="900.0" y="822" text-anchor="middle" font-size="15" fill="#111" font-weight="bold">SFT + GRPO</text>
+<text x="900.0" y="862" text-anchor="middle" font-size="22" fill="#111" font-weight="bold">82.73 / 70.39</text>
+<text x="900.0" y="898" text-anchor="middle" font-size="22" fill="#111" font-weight="bold">87.66 / 72.38</text>
+<text x="900.0" y="930" text-anchor="middle" font-size="12" fill="#555">second stage on the GRPO split</text>
+<rect x="1136" y="794" width="408" height="156" rx="12" fill="#FDF6F0" stroke="#E0925A" stroke-width="3"/>
+<text x="1340.0" y="822" text-anchor="middle" font-size="15" fill="#111" font-weight="bold">KCR, SFT only</text>
+<text x="1340.0" y="862" text-anchor="middle" font-size="22" fill="#111" font-weight="bold">82.80 / 72.07</text>
+<text x="1340.0" y="898" text-anchor="middle" font-size="22" fill="#111" font-weight="bold">87.32 / 72.65</text>
+<text x="1340.0" y="924" text-anchor="middle" font-size="12" fill="#555">matches SFT + GRPO on both models and leads on VisA,</text>
+<text x="1340.0" y="940" text-anchor="middle" font-size="12" fill="#555">and both students beat their teacher on DS-MVTec</text>
+<path d="M535.0 620 L535.0 790" fill="none" stroke="#7BB661" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrGreen)"/>
+<path d="M900.0 620 L900.0 790" fill="none" stroke="#9B7FC4" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrPurple)"/>
+<path d="M1340.0 606 L1340.0 790" fill="none" stroke="#E0925A" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrOrange)"/>
+<path d="M334 567 L376 567 L376 440 L402 440" fill="none" stroke="#5B7FC7" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrBlue)"/>
+<path d="M656 586 L694 586 L694 300 L722 300" fill="none" stroke="#7BB661" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrGreen)"/>
+<path d="M1034 586 L1104 586 L1104 192 L1150 192" fill="none" stroke="#9B7FC4" stroke-width="4.5" stroke-linejoin="round" marker-end="url(#arrPurple)"/>
+<path d="M1526 550 L1580 550 L1580 20 L364 20 L364 182 L402 182" fill="none" stroke="#7BB661" stroke-width="3" stroke-linejoin="round" stroke-dasharray="9 7" marker-end="url(#arrGreen)"/>
+<text x="380" y="14" text-anchor="start" font-size="12" fill="#4f7a3c">reset to base weights, only the data carries forward</text>
+<text x="40" y="992" text-anchor="start" font-size="13" fill="#333">All scores are balanced accuracy on MMAD, reported as DS-MVTec / VisA. First row Qwen2.5-VL-7B, second row LLaVA 7B, same recipe and harness.</text>
+</svg>

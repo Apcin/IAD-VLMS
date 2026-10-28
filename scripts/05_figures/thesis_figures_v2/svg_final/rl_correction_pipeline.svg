@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1530 780" width="1530" height="780" font-family="Verdana, 'DejaVu Sans', Arial, sans-serif" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo0MGQwZTk4MS03MDdhLTRhNGUtOWUyNS00ZGY1ZWY4NzdiODYAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaDyPEXG7ZwactkffIJTfDuIAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDoyNzU3ZDc1NC0wMTlhLTQ5MmItOGI1MC01MDM3NTE0Y2NmNzJscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNo4GBswoiOS3ZaTVen1Su3fgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggf8/A/YVawY0g0OhevtV2zplt6PwJWPu+fWA4BAbObuSkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaB9Tit+kCeDDO3hWN2PRv6oAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCD/TNmBWicGwHO1fgLSD3psNsz/hjdqQSA7l2lkLdA7XWRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBjQZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjQwZDBlOTgxLTcwN2EtNGE0ZS05ZTI1LTRkZjVlZjg3N2I4Ni9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmZkNjBmOWU0LTI0MDQtNDJlZS04NTZkLWRlNTRiZTE0ZDFkYXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCB/z8D9hVrBjSDQ6F6+1XbOmW3o/AlY+759YDgEBs5u5KJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggRdy/6VXg94Gj1SDAyJ0iHzU82lRDZTR0hHVM3AJeqimiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFgg33p0vqkxaRnKtzD3J+nxY7ON7NF90ylkHYnkB6SawHl0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQCyP31XF0EKIg951DS9+weJbVlxv0pahQuBJPyuPZJ3uZTmmC5IDv7AVIUf8jhqv6WXvLkBP/D5Kb5ZnVlQjU0k=</c2pa:manifest></metadata>
+  <defs>
+    <marker id="arr" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L14,7 L0,14 z" fill="#000"/>
+    </marker>
+    <style>
+      .num{font-size:22px;font-weight:bold;fill:#fff;text-anchor:middle}
+      .h{font-size:28px;font-weight:bold;fill:#000;text-anchor:middle}
+      .sub{font-size:18px;fill:#000;text-anchor:middle}
+      .b{font-weight:bold}
+      .t15{font-size:15px;fill:#000}
+      .t16{font-size:16px;fill:#000}
+      .c{text-anchor:middle}
+      .ic{fill:none;stroke:#000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+  </defs>
+  <rect width="1530" height="780" fill="#fff"/>
+
+  <!-- ===== PANEL 1: ROLLOUT ===== -->
+  <rect x="95" y="132" width="310" height="620" rx="48" fill="#fff" stroke="#7fc57f" stroke-width="3"/>
+  <circle cx="133" cy="175" r="20" fill="#1f8ef1"/><text x="133" y="183" class="num">1</text>
+  <text x="252" y="185" class="h">Rollout</text>
+  <text x="250" y="226" class="sub">rollout generations per item</text>
+  <text x="250" y="250" class="sub">from final SFT+GRPO</text>
+  <rect x="105" y="272" width="290" height="248" rx="22" fill="#d4e9d4"/>
+  <text x="250" y="308" class="t16 b c" font-size="18px">User prompt</text>
+  <g class="t16 c">
+    <text x="250" y="352">Analyze the provided image</text>
+    <text x="250" y="374">of the {PRODUCT}.</text>
+    <text x="250" y="396">Determine if there are any</text>
+    <text x="250" y="418">anomalies present. If an</text>
+    <text x="250" y="440">anomaly is detected, specify</text>
+    <text x="250" y="462">its type and location, and</text>
+    <text x="250" y="484">provide a detailed reasoning</text>
+    <text x="250" y="506">for your conclusion.</text>
+  </g>
+  <!-- document icon -->
+  <g class="ic"><rect x="122" y="556" width="62" height="66" rx="6"/><path d="M134 574 h38 M134 588 h38 M134 602 h26"/></g>
+  <!-- image grid -->
+  <g stroke="#3a7d3a" stroke-width="1.5" fill="#c9e6c9">
+    <rect x="225" y="558" width="34" height="30" rx="3"/><rect x="264" y="558" width="34" height="30" rx="3"/><rect x="303" y="558" width="34" height="30" rx="3"/><rect x="342" y="558" width="34" height="30" rx="3"/>
+    <rect x="225" y="594" width="34" height="30" rx="3"/><rect x="264" y="594" width="34" height="30" rx="3"/><rect x="303" y="594" width="34" height="30" rx="3"/><rect x="342" y="594" width="34" height="30" rx="3"/>
+  </g>
+  <g stroke="#7fb87f" stroke-width="2" fill="none" opacity="0.7">
+    <path d="M232 580 l8-14 l6 8 l4-6 l6 12" /><path d="M271 580 l8-14 l6 8 l4-6 l6 12"/><path d="M310 580 l8-14 l6 8 l4-6 l6 12"/><path d="M349 580 l8-14 l6 8 l4-6 l6 12"/>
+    <path d="M232 616 l8-14 l6 8 l4-6 l6 12" /><path d="M271 616 l8-14 l6 8 l4-6 l6 12"/><path d="M310 616 l8-14 l6 8 l4-6 l6 12"/><path d="M349 616 l8-14 l6 8 l4-6 l6 12"/>
+  </g>
+  <path d="M222 632 v6 a6 6 0 0 0 6 6 h66 a6 6 0 0 1 6 6 a6 6 0 0 1 6 -6 h66 a6 6 0 0 0 6 -6 v-6" fill="none" stroke="#000" stroke-width="2"/>
+  <text x="300" y="674" class="t16 b c">k = 8</text>
+  <text x="243" y="702" class="t16 c">Multiple rollout</text>
+  <text x="243" y="724" class="t16 c">(sampling)</text>
+
+  <path d="M405 193 H428" fill="none" stroke="#000" stroke-width="5" marker-end="url(#arr)"/>
+
+  <!-- ===== PANEL 2: LOCAL SCORING ===== -->
+  <rect x="430" y="132" width="330" height="620" rx="48" fill="#fff" stroke="#3b8ee0" stroke-width="3"/>
+  <circle cx="474" cy="175" r="20" fill="#1f8ef1"/><text x="474" y="183" class="num">2</text>
+  <text x="613" y="185" class="h">Local scoring</text>
+  <text x="595" y="226" class="sub">Format + accuracy reward</text>
+  <text x="595" y="250" class="sub">pass/fail bucket + difficulty</text>
+  <!-- row 1 -->
+  <rect x="440" y="279" width="26" height="26" rx="4" fill="#fff" stroke="#3a7d3a" stroke-width="2"/><path d="M445 292 l6 6 l11 -12" fill="none" stroke="#3a7d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="475" y="265" width="278" height="52" rx="10" fill="#cfe3f7"/>
+  <text x="586" y="285" class="t16 b" text-anchor="end">OK</text><text x="591" y="285" class="t16">passes if:</text>
+  <text x="614" y="307" class="t16 c">format = 1, AND acc &gt;=1.0</text>
+  <!-- row 2 -->
+  <circle cx="453" cy="350" r="13" fill="#d9363e"/><path d="M447 344 l12 12 M459 344 l-12 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="475" y="323" width="278" height="52" rx="10" fill="#cfe3f7"/>
+  <text x="586" y="343" class="t16 b" text-anchor="end">NG</text><text x="591" y="343" class="t16">passes if:</text>
+  <text x="614" y="365" class="t16 c">format = 1, AND acc &gt;=1.5</text>
+  <!-- row 3 -->
+  <rect x="440" y="394" width="26" height="26" rx="4" fill="#ffe680" stroke="#b8a000" stroke-width="1"/><path d="M453 397 l3 7 h7 l-6 5 l2 8 l-6 -4 l-6 4 l2 -8 l-6 -5 h7 z" fill="#f2c200" stroke="#b8a000" stroke-width="1"/>
+  <rect x="475" y="381" width="278" height="52" rx="10" fill="#cfe3f7"/>
+  <text x="656" y="401" class="t16 b" text-anchor="end">weak-but-correct</text><text x="661" y="401" class="t16">rewrite</text>
+  <text x="614" y="423" class="t16 c">eligible: passing AND acc &lt; 1.8</text>
+  <!-- row 4 -->
+  <rect x="440" y="453" width="26" height="26" rx="4" fill="#e6e6e6"/><rect x="444" y="466" width="4" height="9" fill="#1f8ef1"/><rect x="450" y="459" width="4" height="16" fill="#3a7d3a"/><rect x="456" y="463" width="4" height="12" fill="#1f8ef1"/><rect x="462" y="461" width="2" height="14" fill="#9b3fbf"/>
+  <rect x="475" y="440" width="278" height="52" rx="10" fill="#cfe3f7"/>
+  <text x="614" y="460" class="t16 b c">difficulty</text>
+  <text x="614" y="482" class="t16 c">= (8 - num_passing) / 8</text>
+  <!-- scoring logic -->
+  <rect x="435" y="499" width="320" height="243" rx="22" fill="#dbeafb" stroke="#6fa3d8" stroke-width="2" stroke-dasharray="7 4"/>
+  <text x="595" y="522" class="t16 b c" font-size="18px">SCORING LOGIC</text>
+  <g class="t15">
+    <text x="443" y="551"><tspan class="b">FORMAT:</tspan> binary consistency reward</text>
+    <text x="443" y="576"><tspan class="b">OK accuracy:</tspan> 1.0 if &lt;answer&gt;=no</text>
+    <text x="443" y="595">else 0.0</text>
+    <text x="443" y="620"><tspan class="b">NG accuracy:</tspan> (type_score +</text>
+    <text x="443" y="639">loc_score)/2  + 1.0 if &lt;answer&gt;=yes</text>
+    <text x="443" y="665"><tspan class="b">TYPE Score:</tspan> similarity bucketed</text>
+    <text x="443" y="694"><tspan class="b">LOCATION Score:</tspan> same 3*3 grid</text>
+    <text x="443" y="713">cell = 1.0 else 0.0</text>
+  </g>
+
+  <path d="M760 193 H783" fill="none" stroke="#000" stroke-width="5" marker-end="url(#arr)"/>
+
+  <!-- ===== PANEL 3: JUDGE ===== -->
+  <rect x="785" y="132" width="310" height="620" rx="48" fill="#fff" stroke="#7b3fbf" stroke-width="3"/>
+  <circle cx="826" cy="175" r="20" fill="#1f8ef1"/><text x="826" y="183" class="num">3</text>
+  <text x="945" y="185" class="h">Judge</text>
+  <svg x="818" y="209" width="22" height="22" fill="none" viewBox="0 0 65 65"><mask id="maskme" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="65" height="65"><path d="M32.447 0c.68 0 1.273.465 1.439 1.125a38.904 38.904 0 001.999 5.905c2.152 5 5.105 9.376 8.854 13.125 3.751 3.75 8.126 6.703 13.125 8.855a38.98 38.98 0 005.906 1.999c.66.166 1.124.758 1.124 1.438 0 .68-.464 1.273-1.125 1.439a38.902 38.902 0 00-5.905 1.999c-5 2.152-9.375 5.105-13.125 8.854-3.749 3.751-6.702 8.126-8.854 13.125a38.973 38.973 0 00-2 5.906 1.485 1.485 0 01-1.438 1.124c-.68 0-1.272-.464-1.438-1.125a38.913 38.913 0 00-2-5.905c-2.151-5-5.103-9.375-8.854-13.125-3.75-3.749-8.125-6.702-13.125-8.854a38.973 38.973 0 00-5.905-2A1.485 1.485 0 010 32.448c0-.68.465-1.272 1.125-1.438a38.903 38.903 0 005.905-2c5-2.151 9.376-5.104 13.125-8.854 3.75-3.749 6.703-8.125 8.855-13.125a38.972 38.972 0 001.999-5.905A1.485 1.485 0 0132.447 0z" fill="#000"/><path d="M32.447 0c.68 0 1.273.465 1.439 1.125a38.904 38.904 0 001.999 5.905c2.152 5 5.105 9.376 8.854 13.125 3.751 3.75 8.126 6.703 13.125 8.855a38.98 38.98 0 005.906 1.999c.66.166 1.124.758 1.124 1.438 0 .68-.464 1.273-1.125 1.439a38.902 38.902 0 00-5.905 1.999c-5 2.152-9.375 5.105-13.125 8.854-3.749 3.751-6.702 8.126-8.854 13.125a38.973 38.973 0 00-2 5.906 1.485 1.485 0 01-1.438 1.124c-.68 0-1.272-.464-1.438-1.125a38.913 38.913 0 00-2-5.905c-2.151-5-5.103-9.375-8.854-13.125-3.75-3.749-8.125-6.702-13.125-8.854a38.973 38.973 0 00-5.905-2A1.485 1.485 0 010 32.448c0-.68.465-1.272 1.125-1.438a38.903 38.903 0 005.905-2c5-2.151 9.376-5.104 13.125-8.854 3.75-3.749 6.703-8.125 8.855-13.125a38.972 38.972 0 001.999-5.905A1.485 1.485 0 0132.447 0z" fill="url(#prefix__paint0_linear_2001_67)"/></mask><g mask="url(#maskme)"><g filter="url(#prefix__filter0_f_2001_67)"><path d="M-5.859 50.734c7.498 2.663 16.116-2.33 19.249-11.152 3.133-8.821-.406-18.131-7.904-20.794-7.498-2.663-16.116 2.33-19.25 11.151-3.132 8.822.407 18.132 7.905 20.795z" fill="#FFE432"/></g><g filter="url(#prefix__filter1_f_2001_67)"><path d="M27.433 21.649c10.3 0 18.651-8.535 18.651-19.062 0-10.528-8.35-19.062-18.651-19.062S8.78-7.94 8.78 2.587c0 10.527 8.35 19.062 18.652 19.062z" fill="#FC413D"/></g><g filter="url(#prefix__filter2_f_2001_67)"><path d="M20.184 82.608c10.753-.525 18.918-12.244 18.237-26.174-.68-13.93-9.95-24.797-20.703-24.271C6.965 32.689-1.2 44.407-.519 58.337c.681 13.93 9.95 24.797 20.703 24.271z" fill="#00B95C"/></g><g filter="url(#prefix__filter3_f_2001_67)"><path d="M20.184 82.608c10.753-.525 18.918-12.244 18.237-26.174-.68-13.93-9.95-24.797-20.703-24.271C6.965 32.689-1.2 44.407-.519 58.337c.681 13.93 9.95 24.797 20.703 24.271z" fill="#00B95C"/></g><g filter="url(#prefix__filter4_f_2001_67)"><path d="M30.954 74.181c9.014-5.485 11.427-17.976 5.389-27.9-6.038-9.925-18.241-13.524-27.256-8.04-9.015 5.486-11.428 17.977-5.39 27.902 6.04 9.924 18.242 13.523 27.257 8.038z" fill="#00B95C"/></g><g filter="url(#prefix__filter5_f_2001_67)"><path d="M67.391 42.993c10.132 0 18.346-7.91 18.346-17.666 0-9.757-8.214-17.667-18.346-17.667s-18.346 7.91-18.346 17.667c0 9.757 8.214 17.666 18.346 17.666z" fill="#3186FF"/></g><g filter="url(#prefix__filter6_f_2001_67)"><path d="M-13.065 40.944c9.33 7.094 22.959 4.869 30.442-4.972 7.483-9.84 5.987-23.569-3.343-30.663C4.704-1.786-8.924.439-16.408 10.28c-7.483 9.84-5.986 23.57 3.343 30.664z" fill="#FBBC04"/></g><g filter="url(#prefix__filter7_f_2001_67)"><path d="M34.74 51.43c11.135 7.656 25.896 5.524 32.968-4.764 7.073-10.287 3.779-24.832-7.357-32.488C49.215 6.52 34.455 8.654 27.382 18.94c-7.072 10.288-3.779 24.833 7.357 32.49z" fill="#3186FF"/></g><g filter="url(#prefix__filter8_f_2001_67)"><path d="M54.984-2.336c2.833 3.852-.808 11.34-8.131 16.727-7.324 5.387-15.557 6.631-18.39 2.78-2.833-3.853.807-11.342 8.13-16.728 7.324-5.387 15.558-6.631 18.39-2.78z" fill="#749BFF"/></g><g filter="url(#prefix__filter9_f_2001_67)"><path d="M31.727 16.104C43.053 5.598 46.94-8.626 40.41-15.666c-6.53-7.04-21.006-4.232-32.332 6.274s-15.214 24.73-8.683 31.77c6.53 7.04 21.006 4.232 32.332-6.274z" fill="#FC413D"/></g><g filter="url(#prefix__filter10_f_2001_67)"><path d="M8.51 53.838c6.732 4.818 14.46 5.55 17.262 1.636 2.802-3.915-.384-10.994-7.116-15.812-6.731-4.818-14.46-5.55-17.261-1.636-2.802 3.915.383 10.994 7.115 15.812z" fill="#FFEE48"/></g></g><defs><filter id="prefix__filter0_f_2001_67" x="-19.824" y="13.152" width="39.274" height="43.217" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="2.46" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter1_f_2001_67" x="-15.001" y="-40.257" width="84.868" height="85.688" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="11.891" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter2_f_2001_67" x="-20.776" y="11.927" width="79.454" height="90.916" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter3_f_2001_67" x="-20.776" y="11.927" width="79.454" height="90.916" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter4_f_2001_67" x="-19.845" y="15.459" width="79.731" height="81.505" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10.109" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter5_f_2001_67" x="29.832" y="-11.552" width="75.117" height="73.758" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="9.606" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter6_f_2001_67" x="-38.583" y="-16.253" width="78.135" height="78.758" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="8.706" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter7_f_2001_67" x="8.107" y="-5.966" width="78.877" height="77.539" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="7.775" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter8_f_2001_67" x="13.587" y="-18.488" width="56.272" height="51.81" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="6.957" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter9_f_2001_67" x="-15.526" y="-31.297" width="70.856" height="69.306" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="5.876" result="effect1_foregroundBlur_2001_67"/></filter><filter id="prefix__filter10_f_2001_67" x="-14.168" y="20.964" width="55.501" height="51.571" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="7.273" result="effect1_foregroundBlur_2001_67"/></filter><linearGradient id="prefix__paint0_linear_2001_67" x1="18.447" y1="43.42" x2="52.153" y2="15.004" gradientUnits="userSpaceOnUse"><stop stop-color="#4893FC"/><stop offset=".27" stop-color="#4893FC"/><stop offset=".777" stop-color="#969DFF"/><stop offset="1" stop-color="#BD99FE"/></linearGradient></defs></svg>
+  <text x="955" y="226" class="sub">Gemini 3 Flash Preview</text>
+  <text x="940" y="250" class="sub">scores &lt;think&gt; faithfulness</text>
+  <g>
+    <rect x="793" y="264" width="295" height="54" rx="10" fill="#e2d9ec"/>
+    <text x="940" y="285" class="t16 b c">0 - HALLUCINATED</text><text x="940" y="306" class="t15 c">Describes things not present</text>
+    <rect x="793" y="324" width="295" height="54" rx="10" fill="#e2d9ec"/>
+    <text x="940" y="345" class="t16 b c">1 - POOR</text><text x="940" y="366" class="t15 c">Generic or significantly off</text>
+    <rect x="793" y="384" width="295" height="54" rx="10" fill="#e2d9ec"/>
+    <text x="940" y="405" class="t16 b c">2 - ACCEPTABLE</text><text x="940" y="426" class="t15 c">Partly grounded; roughly correct</text>
+    <rect x="793" y="444" width="295" height="66" rx="10" fill="#e2d9ec"/>
+    <text x="940" y="465" class="t16 b c">3 - GOOD</text><text x="940" y="484" class="t15 c">Specific, image-grounded</text><text x="940" y="503" class="t15 c">observations</text>
+    <rect x="793" y="516" width="295" height="54" rx="10" fill="#e2d9ec"/>
+    <text x="940" y="537" class="t16 b c">4 - EXCELLENT</text><text x="940" y="558" class="t15 c">Precise and fully image-grounded</text>
+  </g>
+  <!-- refresh icon -->
+  <path d="M812 672 a15 15 0 1 1 5 11" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"/><path d="M808 660 l4 12 l12 -3" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="858" y="600" width="202" height="130" rx="12" fill="#e2d9ec"/>
+  <text x="959" y="616" class="t16 b c">Returns:</text>
+  <g class="t15 c">
+    <text x="959" y="638">faithfulness_score,</text>
+    <text x="959" y="658">faithfulness_label,</text>
+    <text x="959" y="678">rationale,</text>
+    <text x="959" y="698">hallucination_flags,</text>
+    <text x="959" y="718">grounded_observations</text>
+  </g>
+
+  <path d="M1095 193 H1118" fill="none" stroke="#000" stroke-width="5" marker-end="url(#arr)"/>
+
+  <!-- ===== PANEL 4: CORRECTION ===== -->
+  <rect x="1120" y="132" width="315" height="620" rx="48" fill="#fff" stroke="#f0932b" stroke-width="3"/>
+  <circle cx="1162" cy="175" r="20" fill="#1f8ef1"/><text x="1162" y="183" class="num">4</text>
+  <text x="1293" y="185" class="h">Correction</text>
+  <text x="1277" y="226" class="sub">bucket = correction with two</text>
+  <text x="1277" y="250" class="sub">repair paths</text>
+  <!-- Path A -->
+  <rect x="1150" y="260" width="270" height="48" rx="8" fill="#fde3c0" stroke="#d4a017" stroke-width="2"/>
+  <text x="1160" y="290" class="t16 b">Path A: Weak-but-correct</text>
+  <g class="ic" stroke-width="2.5"><rect x="1147" y="341" width="54" height="60" rx="4"/><path d="M1158 356 h30 M1158 368 h30 M1158 380 h16"/><path d="M1175 398 l18 -18 l6 6 l-18 18 z" fill="#fff"/><path d="M1175 398 l1 6 l6 -1"/></g>
+  <rect x="1210" y="318" width="205" height="128" rx="12" fill="#fde3c0"/>
+  <g class="t15 c">
+    <text x="1312" y="340">Rewrite the &lt;think&gt;</text>
+    <text x="1312" y="360">block while keeping the</text>
+    <text x="1312" y="380">same answer, type and</text>
+    <text x="1312" y="400">location. Improve</text>
+    <text x="1312" y="420">grounding and</text>
+    <text x="1312" y="440">specificity.</text>
+  </g>
+  <!-- Path B -->
+  <rect x="1150" y="465" width="262" height="48" rx="8" fill="#fde3c0" stroke="#d4a017" stroke-width="2"/>
+  <text x="1160" y="495" class="t16 b">Path B: Wrong conclusion</text>
+  <!-- cycle-arrows icon (user supplied) -->
+  <g transform="translate(1150,545) scale(0.056)">
+    <g fill="none" stroke="#000" stroke-width="50">
+      <path d="M240 350 A300 300 0 0 1 800 500"/>
+      <path d="M200 500 A300 300 0 0 0 760 650"/>
+    </g>
+    <g fill="#000">
+      <polygon points="200,340 110,500 290,500"/>
+      <polygon points="800,660 710,500 890,500"/>
+    </g>
+  </g>
+  <rect x="1210" y="525" width="200" height="95" rx="12" fill="#fde3c0"/>
+  <g class="t15 c">
+    <text x="1308" y="548">Rewrite from scratch</text>
+    <text x="1308" y="568">using the ground</text>
+    <text x="1308" y="588">truth answer, type,</text>
+    <text x="1308" y="608">and location.</text>
+  </g>
+  <!-- warning -->
+  <text x="1173" y="700" font-size="44px" font-weight="bold" fill="#d9363e" text-anchor="middle">!</text>
+  <rect x="1197" y="650" width="218" height="76" rx="12" fill="#fde3c0"/>
+  <g class="t15 c">
+    <text x="1306" y="672">Use observational</text>
+    <text x="1306" y="692">language; preserve</text>
+    <text x="1306" y="712">exact output tag format</text>
+  </g>
+</svg>

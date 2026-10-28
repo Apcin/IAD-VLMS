@@ -1,0 +1,12 @@
+torch>=2.4
+transformers>=4.57.0
+vllm>=0.11.1
+qwen-vl-utils==0.0.14
+pydantic>=2.7
+Pillow>=10.0
+numpy>=1.26
+scipy>=1.11
+tqdm>=4.66
+requests>=2.31
+huggingface_hub>=0.27
+modelscope>=1.20

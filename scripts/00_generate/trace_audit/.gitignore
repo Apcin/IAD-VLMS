@@ -1,0 +1,11 @@
+# Everything this toolchain generates. All of it is regenerable from the scripts here,
+# and corpus.jsonl alone is about 25 MB. See README.md.
+corpus.jsonl
+format_check.jsonl
+countable_check.jsonl
+calib_*.jsonl
+audit_grounding.jsonl
+audit_report.md
+audit.log
+*.errors.jsonl
+*.log
