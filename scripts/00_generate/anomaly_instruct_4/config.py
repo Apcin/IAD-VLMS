@@ -20,6 +20,11 @@ TRACE_DIR = DATA_DIR / "traces_qwen3vl8b"
 COMPILED_DIR = DATA_DIR / "compiled"
 LOG_DIR = PIPELINE_ROOT / "logs"
 PROMPT_PATH = PIPELINE_ROOT / "prompt_anomaly_instruct_4.txt"
+EVIDENCE_DIR = DATA_DIR / "evidence_qwen3vl8b"
+EVIDENCE_FIRST_TRACE_DIR = DATA_DIR / "traces_qwen3vl8b_evidence_first"
+EVIDENCE_FIRST_COMPILED_DIR = DATA_DIR / "compiled_evidence_first"
+STAGE1_PROMPT_PATH = PIPELINE_ROOT / "prompt_anomaly_instruct_4_stage1_evidence.txt"
+STAGE2_PROMPT_PATH = PIPELINE_ROOT / "prompt_anomaly_instruct_4_stage2_evidence_anchored.txt"
 
 MODEL_PATH = os.environ.get(
     "QWEN3VL_MODEL_PATH",

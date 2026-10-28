@@ -94,3 +94,125 @@ export QWEN3VL_MODEL_PATH=/path/to/Qwen3-VL-8B-Instruct
 `prepare_manifests.py` defaults to requiring every bbox prompt. Use
 `--allow-missing-mvtec3d-bboxes` only for preflight inspection. Compilation rejects
 missing or invalid traces unless `--allow-missing` is explicitly supplied.
+
+## Evidence-first two-stage generation
+
+The baseline command above remains available. The new entry point defaults to
+`mvtec_ad anomaly_shapenet mvtec3d real3d` in that order and runs both stages with
+one frozen Qwen3-VL/vLLM engine. It reads the existing manifests unchanged.
+
+Stage 1 is type-blind and region-guided: it receives object category, neutral view
+IDs, image roles/dimensions, original queries, bbox cue images when available, and
+normal references. It receives no sample IDs, paths, binary answer, defect labels,
+source descriptions, masks, or textual GT coordinates. Bbox cues still originate
+from annotation, so this is not fully GT-blind. Stage 1 records concrete visual
+observations and uncertainty rather than a final diagnosis.
+
+Stage 2 rereads the persisted evidence, receives the same visual images plus the
+existing GT supervision, and reinspects the images before synthesizing the original
+80–220-word structured CoT. Images take priority over evidence; supported evidence
+organizes reasoning; GT constrains the answer/type/location without establishing
+unseen visual details. Uncertain/not-visible evidence is retained, not filtered.
+The original `validate_reasoning()` checks are reused without additions.
+
+```text
+data/manifests/<dataset>.json
+    -> Stage 1: VisualEvidence structured output
+data/evidence_qwen3vl8b/evidence_<dataset>.json
+    -> Stage 2: images + evidence + GT -> existing ReasoningTrace + validation
+data/traces_qwen3vl8b_evidence_first/traces_<dataset>.json
+    -> compile_traces.py --trace-source evidence-first
+data/compiled_evidence_first/<dataset>_cot_sft.json
+```
+
+Each evidence/trace file contains one dataset, with records indexed by the original
+sample ID. The ID is added by Python after Stage 1 generation, not sent to Stage 1:
+
+```json
+{
+  "schema_version": "anomaly-instruct-dataset-records-v1",
+  "dataset": "mvtec_ad",
+  "records": {
+    "original_manifest_id": {
+      "image_id": "original_manifest_id",
+      "dataset": "mvtec_ad",
+      "evidence": {
+        "object_observation": "...",
+        "regional_observations": [{
+          "view_id": "query", "region": "...", "query_evidence": ["..."],
+          "normal_comparison": "...", "visibility": "partial", "uncertainty": "..."
+        }]
+      }
+    }
+  }
+}
+```
+
+Trace records use `reasoning` and `validation` instead of `evidence`, with generation
+metadata in both collections. Only the `evidence` payload is included in Stage 2's
+evidence text. Visibility is `clear`, `partial`, or `not_visible`; uncertainty may be
+null. Regional observations always identify their query `view_id`.
+
+Each accepted inference batch is merged and saved immediately, before retries or
+Stage 2. Dataset files are compact JSON to reduce storage. A persistent `.json.lock`
+file and atomic replacement prevent concurrent shards from overwriting other
+shards' results and protect the prior JSON if a write is interrupted. All shards
+must share the same output directory on a filesystem supporting POSIX file locks
+and atomic rename. Each merge rewrites its dataset JSON; this is the IO cost of
+keeping one JSON per dataset. Do not delete lock files while generators are running.
+
+```bash
+cd scripts/00_generate/anomaly_instruct_4
+
+# Default: all four datasets, Stage 1 then Stage 2, automatic resume.
+python generate_traces_qwen3vl_evidence_first.py
+
+# Small run on one dataset (eight remaining samples).
+python generate_traces_qwen3vl_evidence_first.py --datasets mvtec_ad --max-samples 8
+
+# Select datasets; optionally restrict to normal or anomaly samples.
+python generate_traces_qwen3vl_evidence_first.py --datasets anomaly_shapenet mvtec3d real3d
+python generate_traces_qwen3vl_evidence_first.py --datasets mvtec_ad --normal-only --max-samples 4
+python generate_traces_qwen3vl_evidence_first.py --datasets real3d --anomaly-only --max-samples 4
+
+# Independent stages; cot-only uses existing evidence and never runs Stage 1.
+python generate_traces_qwen3vl_evidence_first.py --stage evidence
+python generate_traces_qwen3vl_evidence_first.py --stage cot
+
+# Two GPU shards, one model replica per GPU; run in separate terminals.
+CUDA_VISIBLE_DEVICES=0 python generate_traces_qwen3vl_evidence_first.py --shard-id 0 --total-shards 2
+CUDA_VISIBLE_DEVICES=1 python generate_traces_qwen3vl_evidence_first.py --shard-id 1 --total-shards 2
+
+# Stage 1 request preview without inference. Stage 2 preview needs cached evidence.
+python generate_traces_qwen3vl_evidence_first.py --stage evidence --debug --datasets mvtec_ad --max-samples 2
+python generate_traces_qwen3vl_evidence_first.py --stage cot --debug --datasets mvtec_ad --max-samples 2
+
+# Optional generation settings; Stage 2 keeps the baseline sampling defaults.
+python generate_traces_qwen3vl_evidence_first.py --batch-size 2 --evidence-temperature 0.2 --evidence-max-new-tokens 2048
+
+# Compile query-only SFT files and separate existing evaluation sidecars.
+python compile_traces.py --trace-source evidence-first
+# Explicitly allow a partial compile after a small run.
+python compile_traces.py --trace-source evidence-first --datasets mvtec_ad --allow-missing
+
+# Offline tests, with no model loading or vLLM dependency.
+python -m unittest test_pipeline.py test_evidence_first_pipeline.py
+```
+
+Use the same compatible inference environment as the baseline
+(`../realiad_v4/requirements-qwen3vl.txt`, including vLLM >= 0.11.1 and a
+Qwen3-VL-capable Transformers installation). Generation defaults to the model path
+in `config.py`; `--model` or `QWEN3VL_MODEL_PATH` overrides it. New output directories
+also honor `ANOMALY_INSTRUCT_WORK_DIR`.
+
+Rerun the same command after interruption: valid final traces are skipped, cached
+evidence is reused, and only missing/invalid results are generated. A successful
+Stage 1 followed by a failed Stage 2 never triggers Stage 1 again. `--stage cot`
+reports missing/invalid evidence and exits nonzero rather than generating it.
+`--max-samples` limits remaining samples across the selected datasets in this shard,
+after filtering/sharding/resume; use identical selections, ordering, and shard counts
+for a parallel run. Failures are stored in `traces_qwen3vl8b_evidence_first/failed/`
+as per-stage/per-shard JSONL logs; debug requests are aggregated by dataset and shard
+under its `debug/` directory. A malformed dataset collection raises an error instead
+of being overwritten. No automatic quality scoring, filtering, training, or judge
+model is added.
