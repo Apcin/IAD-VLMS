@@ -7,6 +7,30 @@ from pathlib import Path
 PIPELINE_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = PIPELINE_ROOT.parents[2]
 
+# Keep all model, compiler, and kernel caches inside this repository instead of
+# silently filling ~/.cache. Set IAD_VLMS_CACHE_ROOT before launch only when an
+# explicit alternative location is required.
+CACHE_ROOT = Path(
+    os.environ.get("IAD_VLMS_CACHE_ROOT", REPO_ROOT / ".cache")
+).expanduser().resolve()
+CACHE_ENVIRONMENT = {
+    "XDG_CACHE_HOME": CACHE_ROOT,
+    "HF_HOME": CACHE_ROOT / "huggingface",
+    "HUGGINGFACE_HUB_CACHE": CACHE_ROOT / "huggingface" / "hub",
+    "MODELSCOPE_CACHE": CACHE_ROOT / "modelscope",
+    "VLLM_CACHE_ROOT": CACHE_ROOT / "vllm",
+    "TORCH_HOME": CACHE_ROOT / "torch",
+    "TORCH_EXTENSIONS_DIR": CACHE_ROOT / "torch_extensions",
+    "TORCHINDUCTOR_CACHE_DIR": CACHE_ROOT / "torchinductor",
+    "TRITON_CACHE_DIR": CACHE_ROOT / "triton",
+    "CUDA_CACHE_PATH": CACHE_ROOT / "cuda",
+    "TVM_FFI_CACHE_DIR": CACHE_ROOT / "tvm-ffi",
+    "FLASHINFER_WORKSPACE_BASE": CACHE_ROOT / "flashinfer_workspace",
+    "NUMBA_CACHE_DIR": CACHE_ROOT / "numba",
+}
+for variable, path in CACHE_ENVIRONMENT.items():
+    os.environ[variable] = str(path)
+
 SOURCE_ROOT = Path(
     os.environ.get(
         "ANOMALY_INSTRUCT_SOURCE_ROOT",

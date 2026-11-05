@@ -82,10 +82,10 @@ def format_user_prompt(sample: dict, validation_errors: Optional[list[str]] = No
     ]
     image_inventory = teacher_image_items(sample)
     image_mapping = "\n".join(
-        f"- Image {index}: {item['role']} (view_id={item['view_id']})"
+        f"- Picture {index}: {item['role']} (view_id={item['view_id']})"
         for index, item in enumerate(image_inventory, start=1)
     )
-    parts.extend(["Image inventory (in exact input order):", image_mapping])
+    parts.extend(["Picture inventory (in exact input order):", image_mapping])
     if sample["is_anomaly"]:
         response_branch = (
             "ANOMALOUS_2D"
@@ -107,10 +107,10 @@ def format_user_prompt(sample: dict, validation_errors: Optional[list[str]] = No
             ]
         )
         parts.append(
-            "For anomaly reasoning, focus on each visibly boxed region in the localization-cue "
-            "image(s) and compare it with the corresponding same-view normal reference. Use the "
-            "original query image(s) only as clean visual context, and do not mention any cue or "
-            "reference in the output."
+            "For anomaly reasoning, use each localization cue only to locate the target region in "
+            "the corresponding clean original query. Inspect visual facts in that clean query "
+            "region, then compare it with the corresponding structure in the same-view normal "
+            "reference. Do not mention any cue or reference in the output."
         )
         if sample["target_modality"] != "2d":
             parts.append(
@@ -134,28 +134,38 @@ def format_user_prompt(sample: dict, validation_errors: Optional[list[str]] = No
 
 
 def teacher_image_items(sample: dict) -> list[dict]:
-    """Describe every teacher image while preserving the existing input order."""
-    items = [
-        {"path": item["path"], "role": "original query", "view_id": item["view_id"]}
-        for item in sample["query_images"]
-    ]
-    if sample["is_anomaly"]:
-        items.extend(
-            {
-                "path": item["path"],
-                "role": "localization cue",
-                "view_id": item["view_id"],
-            }
-            for item in sample["supervision"]["bbox_prompt_images"]
-        )
-    items.extend(
-        {
-            "path": item["path"],
+    """Group query, optional cue, and normal reference by query view."""
+
+    def by_view(records: list[dict], role: str) -> dict[str, dict]:
+        result = {}
+        for record in records:
+            current_view = record["view_id"]
+            if current_view in result:
+                raise ValueError(f"duplicate {role} for view_id={current_view}")
+            result[current_view] = record
+        return result
+
+    queries = sample["query_images"]
+    query_views = {item["view_id"] for item in queries}
+    references = by_view(sample["normal_reference"]["images"], "normal reference")
+    cues = by_view(sample["supervision"]["bbox_prompt_images"], "localization cue")
+    if set(references) != query_views:
+        raise ValueError("normal-reference view IDs do not match query view IDs")
+    if sample["is_anomaly"] and set(cues) != query_views:
+        raise ValueError("localization-cue view IDs do not match query view IDs")
+    items = []
+    for query in queries:
+        current_view = query["view_id"]
+        items.append({"path": query["path"], "role": "clean original query", "view_id": current_view})
+        if sample["is_anomaly"]:
+            cue = cues[current_view]
+            items.append({"path": cue["path"], "role": "localization cue", "view_id": current_view})
+        reference = references[current_view]
+        items.append({
+            "path": reference["path"],
             "role": "same-category normal reference",
-            "view_id": item["view_id"],
-        }
-        for item in sample["normal_reference"]["images"]
-    )
+            "view_id": current_view,
+        })
     return items
 
 
@@ -181,7 +191,9 @@ def build_request(sample: dict, processor, system_prompt: str, errors=None) -> t
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_content},
     ]
-    prompt = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    prompt = processor.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True, add_vision_id=True
+    )
     return (
         {"prompt": prompt, "multi_modal_data": {"image": images}},
         {"prompt": prompt, "plain_user_prompt": user_prompt, "paths": paths, "images": images},
@@ -224,6 +236,7 @@ def create_engine(args):
         max_model_len=args.max_model_len,
         limit_mm_per_prompt={"image": 12, "video": 0},
         mm_processor_kwargs={"min_pixels": args.min_pixels, "max_pixels": args.max_pixels},
+        mm_processor_cache_gb=args.mm_processor_cache_gb,
         seed=args.seed,
     )
 
@@ -339,6 +352,7 @@ def parse_args():
     parser.add_argument("--max-model-len", type=int, default=config.MAX_MODEL_LEN)
     parser.add_argument("--max-new-tokens", type=int, default=config.MAX_NEW_TOKENS)
     parser.add_argument("--gpu-memory-utilization", type=float, default=config.GPU_MEMORY_UTILIZATION)
+    parser.add_argument("--mm-processor-cache-gb", type=float, default=4.0)
     parser.add_argument("--min-pixels", type=int, default=config.MIN_PIXELS)
     parser.add_argument("--max-pixels", type=int, default=config.MAX_PIXELS)
     parser.add_argument("--temperature", type=float, default=config.TEMPERATURE)
@@ -353,6 +367,8 @@ def parse_args():
         parser.error("--shard-id must be in [0, total-shards)")
     if args.anomaly_only and args.normal_only:
         parser.error("--anomaly-only and --normal-only are mutually exclusive")
+    if args.mm_processor_cache_gb < 0:
+        parser.error("--mm-processor-cache-gb must be nonnegative")
     return args
 
 

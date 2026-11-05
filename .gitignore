@@ -5,6 +5,7 @@ vertexai-*.json
 *.pem
 
 # large / regenerable artifacts
+.cache/
 *.safetensors
 *.pt
 *.bin

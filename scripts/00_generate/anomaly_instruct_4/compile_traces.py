@@ -8,7 +8,7 @@ from pathlib import Path
 
 import config
 from dataset_json_store import read_records
-from validate_trace import validate_reasoning
+from validate_trace import validate_evidence_first_reasoning, validate_reasoning
 
 
 def compile_dataset(
@@ -30,7 +30,8 @@ def compile_dataset(
         if trace is None:
             missing += 1
             continue
-        validation = validate_reasoning(trace.get("reasoning", ""), sample, min_iou=min_iou)
+        validator = validate_evidence_first_reasoning if evidence_first else validate_reasoning
+        validation = validator(trace.get("reasoning", ""), sample, min_iou=min_iou)
         if not validation.valid:
             missing += 1
             continue

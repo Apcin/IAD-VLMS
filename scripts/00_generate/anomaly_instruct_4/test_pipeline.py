@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 from build_mvtec3d_bboxes import draw_bbox_prompt
 from dataset_utils import canonical_type, mask_bbox
-from generate_traces_qwen3vl import format_user_prompt, teacher_image_paths
+from generate_traces_qwen3vl import format_user_prompt, teacher_image_items, teacher_image_paths
 from validate_trace import bbox_iou, parse_locations, validate_reasoning
 
 
@@ -77,18 +77,33 @@ class PipelineTests(unittest.TestCase):
         self.assertIn("[101,52,203,177]", prompt)
         self.assertNotIn("copy exactly", prompt.lower())
         self.assertIn("teacher hint", prompt)
-        self.assertIn("focus on each visibly boxed region", prompt)
+        self.assertIn("use each localization cue only to locate the target region", prompt)
         self.assertNotIn("For multiview samples", prompt)
         self.assertIn("Required response branch: ANOMALOUS_2D", prompt)
 
     def test_multiview_prompt_has_explicit_image_role_mapping(self):
         prompt = format_user_prompt(anomaly_sample("3d_multiview"))
-        self.assertIn("Image 1: original query (view_id=view_000)", prompt)
-        self.assertIn("Image 3: localization cue (view_id=view_000)", prompt)
-        self.assertIn("Image 6: same-category normal reference (view_id=view_017)", prompt)
+        self.assertIn("Picture 1: clean original query (view_id=view_000)", prompt)
+        self.assertIn("Picture 2: localization cue (view_id=view_000)", prompt)
+        self.assertIn("Picture 3: same-category normal reference (view_id=view_000)", prompt)
+        self.assertIn("Picture 4: clean original query (view_id=view_017)", prompt)
+        self.assertIn("Picture 5: localization cue (view_id=view_017)", prompt)
+        self.assertIn("Picture 6: same-category normal reference (view_id=view_017)", prompt)
         self.assertIn("match images by view_id", prompt)
         self.assertIn("include every bbox-marked view exactly once", prompt)
         self.assertIn("Required response branch: ANOMALOUS_MULTIVIEW", prompt)
+
+    def test_multiview_teacher_images_are_grouped_by_view(self):
+        self.assertEqual(
+            [item["path"] for item in teacher_image_items(anomaly_sample("3d_multiview"))],
+            ["/v0.png", "/b0.png", "/r0.png", "/v1.png", "/b1.png", "/r1.png"],
+        )
+        normal = anomaly_sample("3d_multiview")
+        normal["is_anomaly"] = False
+        self.assertEqual(
+            [item["path"] for item in teacher_image_items(normal)],
+            ["/v0.png", "/r0.png", "/v1.png", "/r1.png"],
+        )
 
     def test_normal_prompt_selects_normal_branch_without_bbox_cue(self):
         sample = anomaly_sample()

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from dataclasses import asdict, dataclass
 from typing import Optional
 
@@ -20,12 +21,37 @@ ANOMALY_PATTERN = re.compile(
     re.DOTALL,
 )
 WORD_PATTERN = re.compile(r"\b[\w'-]+\b", re.UNICODE)
+EVIDENCE_FIRST_MAX_WORDS = 130
+PICTURE_REFERENCE_ERROR = "picture-number or input-order reference"
+PICTURE_REFERENCE_PATTERN = re.compile(
+    r"\b(?:picture|image)\s*#?\s*\d+\b"
+    r"|\b(?:picture|image)\s+(?:number\s+)?(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b"
+    r"|\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|\d+(?:st|nd|rd|th))\s+(?:picture|image)\b",
+    re.IGNORECASE,
+)
+VIEW_IDENTIFIER_ERROR = "view identifier in descriptive text"
+VIEW_IDENTIFIER_PATTERN = re.compile(r"\bview[_ -]?ids?\b|\bview_\d+\b", re.IGNORECASE)
 FORBIDDEN_PATTERNS = {
-    "annotation leakage": r"\b(?:ground[ -]?truth|annotation|metadata|supervision)\b",
+    "annotation leakage": (
+        r"\b(?:ground[ -]?truth|annotation|metadata|supervision)\b"
+        r"|\b(?:canonical|supplied|provided)\s+(?:(?:anomaly|defect)\s+)?(?:type|label|category)\b"
+    ),
     "mask leakage": r"\b(?:segmentation )?mask\b",
     "bbox-cue leakage": r"\b(?:red|drawn|provided|highlighted) (?:box|bounding box|rectangle)\b",
-    "reference leakage": r"\b(?:reference image|provided normal|comparison image)\b",
-    "multi-image leakage": r"\b(?:second|third|fifth|ninth) image\b",
+    "reference leakage": (
+        r"\b(?:normal|reference|comparison)\s+(?:images?|pictures?|views?|samples?|photographs?)\b"
+        r"|\bnormal\s+references?\b|\b(?:provided|supplied)\s+normal\b"
+        r"|\b(?:provided|supplied|given)\s+(?:images?|pictures?|views?|samples?)\b"
+        r"|\breference\s+comparisons?\b"
+    ),
+    "coordinate leakage": (
+        r"[\[(]\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*\d+\s*[\])]"
+        r"|\b(?:bbox|pixel[ -]coordinates?|location[ -]coordinates?)\b"
+        r"|\b(?:provided|supplied|given)\s+coordinates?\b"
+    ),
+    "pipeline leakage": r"\bevidence_review\b|\bevidence\s+(?:json|record)\b|\b(?:earlier|previous)\s+stage\b",
+    PICTURE_REFERENCE_ERROR: PICTURE_REFERENCE_PATTERN.pattern,
+    VIEW_IDENTIFIER_ERROR: VIEW_IDENTIFIER_PATTERN.pattern,
 }
 
 
@@ -158,11 +184,51 @@ def validate_reasoning(
     )
 
 
+def has_repetition(text: str) -> bool:
+    """Catch long loops within one field, not matching facts across regions."""
+    words = WORD_PATTERN.findall(text.lower())
+    sequences = Counter(tuple(words[index:index + 12]) for index in range(len(words) - 11))
+    return bool(sequences and max(sequences.values()) >= 5)
+
+
+def validate_evidence_first_reasoning(reasoning: str, sample: dict, *, min_iou: float = 0.5) -> ValidationResult:
+    result = validate_reasoning(reasoning, sample, min_iou=min_iou, min_words=1, max_words=EVIDENCE_FIRST_MAX_WORDS)
+    match = (ANOMALY_PATTERN if sample["is_anomaly"] else NORMAL_PATTERN).fullmatch(reasoning or "")
+    if match:
+        think = match.group("think")
+        if re.search(r"\b(?:WRITE_|REPLACE_WITH)\w*|visually grounded inspection reasoning", think, re.IGNORECASE):
+            result.errors.append("placeholder inspection text")
+        if has_repetition(think):
+            result.errors.append("repetitive output in inspection_text")
+        result.valid = not result.errors
+    return result
+
+
 def retry_feedback(errors: list[str]) -> str:
     """Return corrective feedback; the original prompt already contains the GT hint."""
     safe = []
     for error in errors:
-        if "IoU greater than" in error or "view IDs" in error or "outside" in error:
+        if error == "reference leakage":
+            safe.append("Remove all mentions of normal/reference/comparison inputs from <think>; retain supported observations and describe only the inspected object.")
+        elif error == "annotation leakage":
+            safe.append("Remove supervision sources, canonical-type wording and supplied-label references from <think>; describe visible morphology without citing labels.")
+        elif error == "coordinate leakage":
+            safe.append("Remove coordinate lists and coordinate commentary from <think>; keep required coordinates only in <location> and use spatial descriptions in the inspection prose.")
+        elif error == "pipeline leakage":
+            safe.append("Remove evidence records, review-field names and earlier-stage references from the final inspection; describe the query object directly.")
+        elif "repetitive output" in error or "truncated output" in error:
+            safe.append("Return a complete JSON object. Remove looping passages while preserving distinct visual facts and the explanation connecting them to the conclusion. State each point once.")
+        elif error == "placeholder inspection text":
+            safe.append("Replace placeholder wording with actual visible observations, an explanation of their inspection significance and a supported conclusion.")
+        elif error.startswith("evidence_review"):
+            safe.append("Return exactly one evidence_review entry for every listed region_index, without duplicates or omissions; use keep, revise or uncertain and retain the verified facts needed for the inspection judgment.")
+        elif "word count" in error:
+            safe.append(f"{error}. Rewrite the inspection within that limit, aiming for 80-120 words where applicable; preserve key evidence, its significance and the conclusion, without padding or repetition.")
+        elif error == PICTURE_REFERENCE_ERROR:
+            safe.append("Remove picture numbers and input-order references from <think>; describe the query directly.")
+        elif error == VIEW_IDENTIFIER_ERROR:
+            safe.append("Remove view identifiers from <think>; retain required view_id values only in <location>.")
+        elif "IoU greater than" in error or "view IDs" in error or "outside" in error:
             safe.append(
                 "Re-inspect every boxed query view and use the supplied location hint to output a highly consistent bbox in the original image frame."
             )
