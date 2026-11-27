@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="工业异常检测 CoT 视觉忠实度与推理合理性本地核查台">
+  <title>TraceLens · CoT 核查台</title>
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/gallery.css">
+  <link rel="stylesheet" href="/theme.css">
+  <script src="/app.js" defer></script>
+  <script src="/background.js" defer></script>
+</head>
+<body>
+  <canvas id="ambient-background" aria-hidden="true"></canvas>
+  <header class="topbar">
+    <a class="brand" href="/"><img src="/logo.svg" width="38" height="38" alt=""><span>TraceLens<small>CoT 视觉与推理核查</small></span></a>
+    <nav aria-label="主导航"><a href="#workspace" class="nav-active">样本图库</a><a href="#guide">评估说明</a></nav>
+    <div class="connection"><span class="dot"></span>本地数据 <span id="judge-model" class="mono">待选择评估模型</span><button id="refresh" class="quiet">刷新数据 ↻</button></div>
+  </header>
+  <main id="workspace">
+    <section class="intro"><div><div class="eyebrow">EVIDENCE / REASONING / REVIEW</div><h1>让每一句推断，都回到图像。</h1><p>点击样本图片，打开原图、完整 CoT 与两个维度的简短判断。</p></div><span class="local-chip">LOCAL REVIEW WORKSPACE</span></section>
+    <section class="stats" aria-label="评估概况">
+      <article><span>有效 CoT 样本</span><strong id="stat-total">—</strong><small id="dataset-count">四个数据集</small></article>
+      <article><span>已完成评估</span><strong id="stat-done">—</strong><div class="progress"><i id="progress-bar"></i></div><small id="stat-progress">等待加载</small></article>
+      <article><span>需要重点复核</span><strong id="stat-review" class="amber">—</strong><small>需复核 + 不通过</small></article>
+      <article><span>人工已核查</span><strong id="stat-human">—</strong><small id="stat-flagged">待跟进 — 条</small></article>
+    </section>
+    <section class="filters panel" aria-label="样本筛选">
+      <div class="filter-primary">
+        <label>数据集<select id="dataset"><option value="">全部数据集</option></select></label>
+        <label>物体类别<select id="category"><option value="">全部类别</option></select></label>
+        <label>样本标签<select id="label"><option value="">全部标签</option><option value="1">异常 Anomaly</option><option value="0">正常 Normal</option></select></label>
+        <label>评估状态<select id="status"><option value="">全部状态</option><option value="pending">待评估</option><option value="done">已评估</option><option value="pass">通过</option><option value="review">需复核</option><option value="fail">不通过</option><option value="error">调用 / 图片错误</option></select></label>
+        <label class="search-label">搜索<input id="q" placeholder="样本 ID 或评语关键词…" type="search"></label>
+        <button id="reset" class="quiet">重置</button>
+      </div>
+      <details class="advanced"><summary>更多筛选与排序</summary><div class="filter-secondary">
+        <label>异常类型<select id="defect_type"><option value="">全部类型</option></select></label>
+        <label>视觉判断<select id="visual_judgment"><option value="">全部</option><option>忠实</option><option>不忠实</option><option>不确定</option></select></label>
+        <label>推理判断<select id="logic_judgment"><option value="">全部</option><option>合理</option><option>不合理</option><option>不确定</option></select></label>
+        <label>人工核查<select id="human"><option value="">全部</option><option value="unreviewed">未核查</option><option value="checked">已核查</option><option value="flagged">待跟进</option></select></label>
+        <label>排序<select id="sort"><option value="id">样本顺序</option><option value="attention">待复核优先</option><option value="recent">最近评估</option></select></label>
+        <label>每页<select id="page_size"><option>30</option><option>50</option><option>100</option></select></label>
+      </div></details>
+    </section>
+    <section class="sample-browser panel">
+      <div class="sample-list-header"><h2>样本图库 <span id="result-count">—</span></h2><span class="muted">点击图片查看详情 · 关闭弹窗继续浏览</span></div>
+      <div id="sample-list" class="sample-grid" aria-label="样本图片" aria-busy="true"></div>
+      <div class="pagination"><button id="page-prev" class="quiet">← 上一页</button><label>第 <input id="page-number" type="number" value="1" min="1" aria-label="页码"><span id="page-total">/ 1</span> 页</label><button id="page-next" class="quiet">下一页 →</button></div>
+    </section>
+    <section id="guide" class="guide panel"><div class="eyebrow">READING THE JUDGMENTS</div><h2>两个维度，分别判断</h2><div class="guide-grid"><p><strong>视觉忠实度</strong><br>判断“忠实 / 不忠实 / 不确定”，说明图像是否支持位置、颜色、形状等描述。</p><p><strong>推理合理性</strong><br>判断“合理 / 不合理 / 不确定”，说明观察、推断、结论及标签是否一致。</p><p><strong>约 100 字，不打分</strong><br>新评估仅输出两段简短判断与依据，合计最多 100 个正文字符。历史评分版会保留并标明来源。</p><p><strong>核查依据</strong><br>模型查看干净查询图与正常参考图。红色 GT 框供人工定位。遇到不确定，或任一维度不受支持时，建议重点复核。</p></div><p class="muted" id="catalog-info"></p><p class="muted">弹窗中：J / K 切换样本，← / → 切换视角；Esc 或右上角 × 关闭。图片按页加载，每 30 秒刷新评估概况。</p></section>
+  </main>
+  <footer><span>TraceLens <span class="muted">/ Anomaly-Instruct</span></span><button id="toggle-background" class="quiet background-toggle" type="button" aria-pressed="true">背景动画：开启</button><span class="muted" id="last-updated">图片与 CoT 直接读取原始文件</span></footer>
+  <dialog id="sample-dialog" class="sample-dialog" aria-labelledby="sample-dialog-title"><header class="sample-dialog-bar"><h2 id="sample-dialog-title">样本详情</h2><span class="muted">Esc 返回图库</span><button id="close-sample" class="quiet" aria-label="关闭样本详情">×</button></header><article id="detail" class="detail"></article></dialog>
+  <dialog id="image-dialog"><div class="dialog-head"><span id="image-title"></span><button id="close-image" class="quiet">关闭 ✕</button></div><img id="large-image" alt="放大视图"></dialog>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

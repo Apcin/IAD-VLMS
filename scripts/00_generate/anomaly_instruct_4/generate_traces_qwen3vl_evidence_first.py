@@ -8,6 +8,7 @@ import logging
 import os
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -18,10 +19,73 @@ import config
 import generate_traces_qwen3vl as baseline
 from dataset_json_store import merge_records, read_records
 from validate_trace import (
+    BBOX_CUE_ERROR,
+    BBOX_CUE_PATTERN,
+    PICTURE_REFERENCE_ERROR,
+    VIEW_IDENTIFIER_ERROR,
+    contradicts_inspection_conclusion,
     has_repetition,
     retry_feedback,
     validate_evidence_first_reasoning,
 )
+
+
+FOCUS_COVERAGE_ERROR = "missing usable evidence for a marked query view"
+REGION_LOCATOR_ERROR = "region needs a usable spatial locator"
+COMPARISON_CONTENT_ERROR = "normal_comparison needs a visible comparison or a reason it is limited"
+COMPARISON_VERDICT_ERROR = "normal_comparison contains a definitive defect judgment"
+PROSE_SOURCE_ERRORS = {
+    "reference leakage", BBOX_CUE_ERROR, "mask leakage", "annotation leakage",
+    "coordinate leakage", "pipeline leakage", PICTURE_REFERENCE_ERROR, VIEW_IDENTIFIER_ERROR,
+}
+EVIDENCE_RETRY_GUIDANCE = {
+    FOCUS_COVERAGE_ERROR: "Review every listed priority view. Give a visible fact for its marked physical part or state exactly what limits visibility.",
+    REGION_LOCATOR_ERROR: "Name the inspected part or area in region. A quadrant is fine for a continuous surface.",
+    COMPARISON_CONTENT_ERROR: "Compare the same part in query and reference, or state what prevents that comparison.",
+    COMPARISON_VERDICT_ERROR: "Rewrite normal_comparison as visible similarities, differences or comparison limits. Leave the defect judgment to Stage 2.",
+    f"{BBOX_CUE_ERROR} in region": "In region, give only the physical part or surface position, without how it was located.",
+    f"{BBOX_CUE_ERROR} in query_evidence": "Rewrite query_evidence using the clean query for that view. Trace the object's own boundary and ignore the cue outline.",
+    f"{BBOX_CUE_ERROR} in normal_comparison": "Redo normal_comparison using the clean query and the listed same-category normal reference. Compare the same part or explain what prevents comparison.",
+    f"{BBOX_CUE_ERROR} in object_observation": "Rewrite object_observation using the overall form visible in the clean query.",
+    f"{BBOX_CUE_ERROR} in uncertainty": "Rewrite uncertainty as a visibility or comparison limit of the images, or use null.",
+}
+REGION_CUE_SUFFIX = re.compile(
+    r",\s+(?:as )?(?:indicated|marked|highlighted|shown|outlined) by "
+    r"(?:the |a )?(?:red (?:box|rectangle)|bounding box)"
+    r"(?: in (?:picture|image|view)\s+#?\d+)?[.!]?$",
+    re.IGNORECASE,
+)
+UNLOCATED_REGION = re.compile(
+    r"(?:the |an? )?(?:(?:highlighted|marked|indicated|selected|affected|target|visible) )?"
+    r"(?:area|region|part|portion|surface)",
+    re.IGNORECASE,
+)
+GRID_PLACEHOLDER = re.compile(
+    r"(?:centered (?:near|in) )?(?:the )?(?:"
+    r"(?:upper|middle|lower) row(?:,\s*(?:left|center|right) column)?|(?:left|center|right) column)"
+    r"(?: of (?:the )?(?:full )?(?:query(?: image)?|image|frame))?",
+    re.IGNORECASE,
+)
+QUERY_ONLY_COMPARISON = (
+    r"(?:this is )?(?:an? )?(?:defect|anomaly) observation(?: in the query(?: view| image)?)?"
+)
+COMPARISON_PLACEHOLDER = re.compile(
+    rf"(?:n/?a|not applicable|none)(?:[.;:,]\s*{QUERY_ONLY_COMPARISON})?|{QUERY_ONLY_COMPARISON}",
+    re.IGNORECASE,
+)
+COMPARISON_VERDICT = re.compile(
+    r"\b(?:confirms|proves|establishes|demonstrates)\s+(?:"
+    r"(?:the presence of\s+)?(?:damage|defects|an? (?:surface |structural )?(?:defect|anomaly))\b"
+    r"|[^.!?;\n]{1,120}?\b(?:is|are)\s+(?:damaged|defective|anomalous|"
+    r"an? (?:surface |structural )?(?:defect|anomaly))\b)",
+    re.IGNORECASE,
+)
+
+
+class EvidenceCueLeakage(ValueError):
+    def __init__(self, fields: list[str]):
+        super().__init__(BBOX_CUE_ERROR)
+        self.fields = fields
 
 
 class RegionalObservation(BaseModel):
@@ -30,12 +94,12 @@ class RegionalObservation(BaseModel):
     view_id: str = Field(description="Supplied query view identifier for this region.")
     region: str = Field(
         min_length=1,
-        description="Prefer a short spatial locator; place detailed findings in query_evidence when possible.",
+        description="Only the inspected physical part or surface position. Omit the annotation source.",
     )
-    query_evidence: list[str] = Field(description="Distinct visible facts covering the relevant local morphology, surface condition, boundaries and continuity; preserve useful details and uncertainty.")
+    query_evidence: list[str] = Field(description="Local features visible in the clean query for this view.")
     normal_comparison: str = Field(
         min_length=1,
-        description="Reliable visual similarities or differences from the corresponding normal structure.",
+        description="Same-part differences, similarities, or limits when comparing the clean query with the normal reference.",
     )
     visibility: Literal["clear", "partial", "not_visible"]
     uncertainty: Optional[str]
@@ -44,13 +108,13 @@ class RegionalObservation(BaseModel):
 class VisualEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    regional_observations: list[RegionalObservation] = Field(
+        min_length=1,
+        description="Local observations, starting with the actual marked areas when cues are supplied.",
+    )
     object_observation: str = Field(
         min_length=1,
         description="Overall visible form, arrangement and appearance, with enough context to identify the inspected structures; detailed local findings belong in regional_observations.",
-    )
-    regional_observations: list[RegionalObservation] = Field(
-        min_length=1,
-        description="Separate entries for spatially distinct inspected regions; multiple entries may share the same view_id.",
     )
 
 
@@ -60,18 +124,27 @@ class EvidenceReview(BaseModel):
     region_index: int = Field(ge=0)
     decision: Literal["keep", "revise", "uncertain"]
     verified_observation: str = Field(
-        description="Verified local observations, corrections or additions, relevant comparisons and uncertainty. Cover the facts needed to explain the inspection judgment; do not compress away diagnostic details or infer morphology from a label.",
+        description="Key verified facts, corrections, or limits for this region.",
     )
 
 
 class EvidenceAnchoredTrace(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    image_id: str
     evidence_review: list[EvidenceReview] = Field(min_length=1)
-    inspection_text: str = Field(
-        description="Evidence-based inspection assessment of the query: relevant overall condition, specific visible evidence, why it supports the judgment, and a conclusion with appropriate uncertainty. Aim for 80-120 English words; 130 is the hard maximum, not a requirement to pad. Omit auxiliary sources, coordinate commentary and XML tags.",
+    inspection_conclusion: Literal["normal", "anomalous", "uncertain"]
+    supporting_region_index: int | None = Field(
+        description="Zero-based index of the verified local finding used in inspection_text for an anomalous conclusion. Null otherwise.",
     )
+    inspection_text: str = Field(
+        description="Explain how the verified observations support the inspection conclusion. At most 130 English words.",
+    )
+
+
+class ProseRepair(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    inspection_text: str
 
 
 logger = logging.getLogger(__name__)
@@ -83,6 +156,10 @@ def collection_path(stage: str, dataset: str) -> Path:
     return config.EVIDENCE_FIRST_TRACE_DIR / f"traces_{dataset}.json"
 
 
+def marked_query_views(sample: dict) -> set[str]:
+    return {box["view_id"] for box in sample["supervision"]["bboxes"]}
+
+
 def image_description(sample: dict) -> str:
     dimensions = ", ".join(
         f"{item['view_id']}={item['width']}x{item['height']}"
@@ -92,7 +169,14 @@ def image_description(sample: dict) -> str:
         f"- Picture {index}: {item['role']} (view_id={item['view_id']})"
         for index, item in enumerate(baseline.teacher_image_items(sample), start=1)
     )
-    return f"Query view dimensions: {dimensions}\nPicture inventory (exact input order):\n{inventory}"
+    parts = [f"Query view dimensions: {dimensions}\nPicture inventory (exact input order):\n{inventory}"]
+    marked_views = marked_query_views(sample)
+    if marked_views:
+        parts.append(
+            f"Priority views with marked areas: {', '.join(sorted(marked_views))}. "
+            "Use the cue to find the physical part, then inspect it and its boundary in the full clean query."
+        )
+    return "\n".join(parts)
 
 
 def format_stage1_user_prompt(sample: dict, errors=None) -> str:
@@ -105,62 +189,31 @@ def format_stage1_user_prompt(sample: dict, errors=None) -> str:
         "Extract observable visual evidence and return the VisualEvidence JSON object.",
         f"Object category: {sample['object_category']}",
         image_description(sample),
-        (
-            "For each view, use its localization cue only to locate the target region in the clean "
-            "original query when a cue is supplied. Inspect visual facts in the clean original query, "
-            "prioritizing that region when present, then compare the inspected query region or "
-            "structure with its counterpart in the same-view normal reference. Cover all relevant visible "
-            "features, similarities, differences and uncertainty needed for a later inspection assessment; "
-            "do not reduce the evidence to a generic mark or omit details merely to shorten the response."
-        ),
     ]
     if errors:
         # Parser/IO errors may contain paths or internal identifiers. Do not relay
         # their raw text to this type-blind stage, even on a retry.
-        parts.append("Return a complete valid JSON object using the required fields and supplied query view IDs. Preserve distinct visual details and uncertainty; remove repetition rather than useful evidence.")
+        tips = [tip for error, tip in EVIDENCE_RETRY_GUIDANCE.items() if error in errors]
+        parts.extend(tips or ["Return one complete JSON object using the required fields and supplied query view IDs."])
     return "\n".join(parts)
 
 
 def format_stage2_user_prompt(sample: dict, evidence: VisualEvidence, errors=None) -> str:
+    # IDs can contain defect names. Associate responses with samples locally.
+    marked_views = marked_query_views(sample)
+    regions = [
+        {"region_index": index, "priority_view": item.view_id in marked_views, **item.model_dump()}
+        for index, item in enumerate(evidence.regional_observations)
+    ]
     parts = [
-        "Return image_id, evidence_review, and inspection_text in that order. Recheck the images first, then write the final inspection from verified observations.",
-        f"Image ID: {sample['id']}",
         f"Object category: {sample['object_category']}",
         image_description(sample),
-        "Candidate visual evidence (observations to check, not ground truth):",
-        evidence.model_dump_json(),
-        "Region indices for evidence_review (zero-based regional_observations order):",
-        json.dumps([{"region_index": index, "view_id": item.view_id, "region": item.region}
-                    for index, item in enumerate(evidence.regional_observations)], ensure_ascii=False),
-        "Recheck each region in its clean query. Keep supported observations, revise unsupported interpretations, "
-        "or mark uncertain when the images cannot decide. Add relevant visible omissions in verified_observation. "
-        "An accurate record may use keep for every region; do not invent corrections. "
-        "Internal reference comparisons are allowed in evidence_review. Compose inspection_text from verified observations, "
-        "retaining uncertainty but omitting auxiliary input sources. Explain the relevant overall condition, "
-        "specific visible evidence, its inspection significance and how it supports the conclusion; do not stop "
-        "at a feature list. Aim for 80-120 English words with a hard maximum of 130. This is a soft length "
-        "target, so completeness matters more than padding. Do not generate XML tags, coordinates, types or answers as separate fields.",
+        "Stage 1 regional_observations. Review every listed region_index once. "
+        "For each priority view, check the area indicated by its cue in the full clean query first.",
+        json.dumps(regions, ensure_ascii=False),
     ]
-    if sample["is_anomaly"]:
-        branch = "ANOMALOUS_2D" if sample["target_modality"] == "2d" else "ANOMALOUS_MULTIVIEW"
-        location = json.dumps(baseline.ground_truth_location_value(sample), separators=(",", ":"))
-        parts.extend([
-            "[INTERNAL supervision; never disclose] Ground Truth: ANOMALOUS",
-            f"[INTERNAL supervision; never disclose] Canonical anomaly type: {sample['supervision']['anomaly_type']['canonical']}",
-            f"[INTERNAL supervision; never disclose] Ground-truth location (inclusive original pixel xyxy): {location}",
-        ])
-    else:
-        branch = "NORMAL"
-        parts.append("[INTERNAL supervision; never disclose] Ground Truth: NORMAL")
-    parts.append(f"Required response branch: {branch}. Supervision does not establish visible morphology; the program assembles the final tags from the supplied supervision.")
-    if not sample["is_anomaly"]:
-        parts.append("Explain why the inspected structures support a normal judgment and why relevant appearance variations do not establish a defect. Relate visible condition to expected structure or function where supported; keep unobserved properties uncertain.")
-    else:
-        parts.append("Explain how the verified morphology departs from expected structure or surface condition and supports the anomalous judgment. Connect the finding to the defect interpretation without inventing morphology or treating the label as visual proof; retain uncertainty about depth, cause or unseen effects.")
-    if sample["target_modality"] != "2d":
-        parts.append("Keep each finding tied to the view where it is visible; do not transfer findings across views or infer hidden 3D structure. Do not put view identifiers in inspection_text.")
     if errors:
-        parts.append(retry_feedback(errors).replace("<think>", "inspection_text").replace("<location>", "the program-generated location tag"))
+        parts.append(retry_feedback(errors, evidence_first=True).replace("<think>", "inspection_text"))
     return "\n".join(parts)
 
 
@@ -185,17 +238,70 @@ def build_request(sample, processor, system_prompt, stage, evidence=None, errors
     return {"prompt": prompt, "multi_modal_data": {"image": images}}, {"prompt": prompt, "paths": paths}
 
 
-def parse_evidence(text: str, sample: dict) -> VisualEvidence:
+def build_prose_repair_request(processor, trace: EvidenceAnchoredTrace, errors: list[str]) -> dict:
+    messages = [
+        {"role": "system", "content": (
+            "Rewrite only the inspection_text as an English paragraph of at most 130 words. "
+            "Use only confirmed observations, preserve the visibility limits and inspection conclusion, and describe "
+            "the object itself without mentioning the sources of the evidence. Return one JSON object "
+            "with inspection_text. Keep the observations and conclusion fixed."
+        )},
+        {"role": "user", "content": [
+            {"type": "text", "text": (
+                trace.model_dump_json() + "\n"
+                + retry_feedback(errors, evidence_first=True).replace("<think>", "inspection_text")
+            )},
+        ]},
+    ]
+    return {"prompt": processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)}
+
+
+def json_payload(text: str) -> str:
     stripped = text.strip()
     fenced = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", stripped, flags=re.DOTALL | re.IGNORECASE)
-    evidence = VisualEvidence.model_validate_json(fenced.group(1) if fenced else stripped)
+    return fenced.group(1) if fenced else stripped
+
+
+def parse_evidence(text: str, sample: dict) -> VisualEvidence:
+    evidence = VisualEvidence.model_validate_json(json_payload(text))
     views = {item["view_id"] for item in sample["query_images"]}
     if any(item.view_id not in views for item in evidence.regional_observations):
         raise ValueError("evidence contains an unknown query view_id")
-    descriptions = [evidence.object_observation]
+    inspected_views = {
+        item.view_id for item in evidence.regional_observations
+        if any(fact.strip() for fact in item.query_evidence)
+        or (
+            item.visibility != "clear"
+            and (item.uncertainty or "").strip().casefold() not in {"", "none", "null", "n/a"}
+        )
+    }
+    if marked_query_views(sample) - inspected_views:
+        raise ValueError(FOCUS_COVERAGE_ERROR)
+    descriptions = [("object_observation", evidence.object_observation)]
     for item in evidence.regional_observations:
-        descriptions.extend([item.region, *item.query_evidence, item.normal_comparison, item.uncertainty or ""])
-    if any(has_repetition(text) for text in descriptions):
+        region = " ".join(item.region.split()).rstrip(".")
+        suffix = REGION_CUE_SUFFIX.search(region)
+        if suffix:
+            locator = region[:suffix.start()].strip()
+            if locator and not UNLOCATED_REGION.fullmatch(locator) and not BBOX_CUE_PATTERN.search(locator):
+                item.region = region = locator
+        if not region or GRID_PLACEHOLDER.fullmatch(region):
+            raise ValueError(REGION_LOCATOR_ERROR)
+        comparison = " ".join(item.normal_comparison.split()).rstrip(".")
+        if not comparison or COMPARISON_PLACEHOLDER.fullmatch(comparison):
+            raise ValueError(COMPARISON_CONTENT_ERROR)
+        if COMPARISON_VERDICT.search(item.normal_comparison):
+            raise ValueError(COMPARISON_VERDICT_ERROR)
+        descriptions.extend([
+            ("region", item.region),
+            *(("query_evidence", fact) for fact in item.query_evidence),
+            ("normal_comparison", item.normal_comparison),
+            ("uncertainty", item.uncertainty or ""),
+        ])
+    leaked_fields = list(dict.fromkeys(field for field, text in descriptions if BBOX_CUE_PATTERN.search(text)))
+    if leaked_fields:
+        raise EvidenceCueLeakage(leaked_fields)
+    if any(has_repetition(text) for _, text in descriptions):
         raise ValueError("repetitive output in Stage 1 evidence")
     return evidence
 
@@ -219,29 +325,71 @@ def has_evidence(sample: dict, records: dict) -> bool:
 
 def has_trace(sample: dict, records: dict, min_iou: float) -> bool:
     record = records.get(sample["id"], {})
+    review = record.get("evidence_review")
     return (
         record.get("image_id") == sample["id"]
         and record.get("dataset") == sample["dataset"]
         and isinstance(record.get("reasoning"), str)
         and isinstance(record.get("inspection_text"), str)
-        and bool(record.get("evidence_review"))
+        and isinstance(review, list)
+        and bool(review)
+        and all(
+            isinstance(item, dict) and isinstance(item.get("verified_observation"), str)
+            and not BBOX_CUE_PATTERN.search(item["verified_observation"])
+            for item in review
+        )
         and record["reasoning"] == assemble_reasoning(record["inspection_text"], sample)
         and validate_evidence_first_reasoning(record["reasoning"], sample, min_iou=min_iou).valid
     )
 
 
 def parse_stage2_response(text: str, evidence: VisualEvidence) -> EvidenceAnchoredTrace:
-    stripped = text.strip()
-    fenced = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", stripped, flags=re.DOTALL | re.IGNORECASE)
-    trace = EvidenceAnchoredTrace.model_validate_json(fenced.group(1) if fenced else stripped)
-    indices = [item.region_index for item in trace.evidence_review]
-    if sorted(indices) != list(range(len(evidence.regional_observations))):
-        raise ValueError("evidence_review must cover every region_index exactly once")
+    trace = EvidenceAnchoredTrace.model_validate_json(json_payload(text))
+    indices = Counter(item.region_index for item in trace.evidence_review)
+    expected = set(range(len(evidence.regional_observations)))
+    problems = []
+    for label, affected in (
+        ("missing", expected - indices.keys()),
+        ("duplicate", {index for index, count in indices.items() if count > 1}),
+        ("unexpected", indices.keys() - expected),
+    ):
+        if affected:
+            problems.append(f"{label} region_index {', '.join(map(str, sorted(affected)))}")
+    if problems:
+        raise ValueError("evidence_review must cover every region_index exactly once. " + ". ".join(problems))
     if any(not item.verified_observation.strip() for item in trace.evidence_review):
         raise ValueError("evidence_review observations must not be empty")
+    if any(BBOX_CUE_PATTERN.search(item.verified_observation) for item in trace.evidence_review):
+        raise ValueError(BBOX_CUE_ERROR)
     if any(has_repetition(item.verified_observation) for item in trace.evidence_review):
         raise ValueError("repetitive output in evidence_review")
     return trace
+
+
+def inspection_support_error(trace: EvidenceAnchoredTrace, evidence: VisualEvidence, sample: dict) -> str | None:
+    verified = set()
+    for review in trace.evidence_review:
+        region = evidence.regional_observations[review.region_index]
+        if review.decision == "revise" or (
+            review.decision == "keep" and region.visibility != "not_visible"
+            and any(fact.strip() for fact in region.query_evidence)
+        ):
+            verified.add(review.region_index)
+    boxed_views = marked_query_views(sample)
+    if trace.inspection_conclusion == "normal":
+        if not any(not boxed_views or evidence.regional_observations[i].view_id in boxed_views for i in verified):
+            return "normal conclusion requires a verified observation in the query or marked area"
+        return None
+
+    index = trace.supporting_region_index
+    if index is None or not 0 <= index < len(evidence.regional_observations):
+        return "anomalous conclusion requires a valid supporting_region_index"
+    region = evidence.regional_observations[index]
+    if index not in verified:
+        return "selected region lacks a verified query observation for the anomalous conclusion"
+    if boxed_views and region.view_id not in boxed_views:
+        return "selected region is outside the annotated query views"
+    return None
 
 
 def assemble_reasoning(inspection_text: str, sample: dict) -> str:
@@ -264,7 +412,7 @@ def make_sampling_params(args, stage):
             "use ../realiad_v4/requirements-qwen3vl.txt (vllm>=0.11.1)."
         ) from error
 
-    schema = (VisualEvidence if stage == "evidence" else EvidenceAnchoredTrace).model_json_schema()
+    schema = {"evidence": VisualEvidence, "cot": EvidenceAnchoredTrace, "prose": ProseRepair}[stage].model_json_schema()
     # This installed decoder turns string length keywords into regexes that reject
     # valid JSON escapes. Keep ordinary JSON string grammar; Pydantic still checks
     # nonempty evidence after parsing. Array sizes/required fields are unchanged.
@@ -305,22 +453,29 @@ def append_failure(sample, stage, errors, raw_output, shard_id, generation_attem
 def process_chunk(samples, engine, processor, sampling_params, system_prompt, args, stage, evidence_records):
     pending, feedback, last_outputs = list(samples), {}, {}
     histories = {}
-    chunk_params = sampling_params
+    fixed_traces, repair_params = {}, None
     # Use the configured budget for both full regional review and final assessment.
     # Repetition/truncation guards handle failures without shrinking normal prose.
-    saved = 0
+    saved = held_for_review = 0
     for attempt in range(1, args.max_retries + 1):
         if not pending:
             break
-        requests, request_samples, next_pending = [], [], []
+        requests, request_samples, request_params, next_pending = [], [], [], []
         for sample in pending:
             try:
-                evidence = load_sample_evidence(sample, evidence_records) if stage == "cot" else None
-                request, _ = build_request(
-                    sample, processor, system_prompt, stage, evidence, feedback.get(sample["id"]),
-                )
+                image_id = sample["id"]
+                params = sampling_params
+                if image_id in fixed_traces:
+                    if repair_params is None:
+                        repair_params = make_sampling_params(args, "prose")
+                    params = repair_params
+                    request = build_prose_repair_request(processor, fixed_traces[image_id], feedback[image_id])
+                else:
+                    evidence = load_sample_evidence(sample, evidence_records) if stage == "cot" else None
+                    request, _ = build_request(sample, processor, system_prompt, stage, evidence, feedback.get(image_id))
                 requests.append(request)
                 request_samples.append(sample)
+                request_params.append(params)
             except Exception as error:
                 feedback[sample["id"]] = [f"request construction failed: {error}"]
                 next_pending.append(sample)
@@ -329,11 +484,11 @@ def process_chunk(samples, engine, processor, sampling_params, system_prompt, ar
             break
         # As in the baseline, engine-level failures stop the run. Completed batches
         # are already on disk and the same command resumes their remaining work.
-        outputs = engine.generate(requests, chunk_params)
+        outputs = engine.generate(requests, request_params if fixed_traces else sampling_params)
         if len(outputs) != len(request_samples):
             raise RuntimeError("vLLM output count differs from request count")
         records = {}
-        for sample, output in zip(request_samples, outputs):
+        for sample, output, params in zip(request_samples, outputs, request_params):
             image_id = sample["id"]
             completion = output.outputs[0] if output.outputs else None
             raw = completion.text if completion else ""
@@ -343,7 +498,7 @@ def process_chunk(samples, engine, processor, sampling_params, system_prompt, ar
                 "finish_reason": getattr(completion, "finish_reason", None),
                 "stop_reason": getattr(completion, "stop_reason", None),
                 "output_tokens": len(getattr(completion, "token_ids", []) or []),
-                "token_budget": getattr(chunk_params, "max_tokens", None),
+                "token_budget": getattr(params, "max_tokens", None),
             }
             histories.setdefault(image_id, []).append(metadata)
             try:
@@ -364,30 +519,58 @@ def process_chunk(samples, engine, processor, sampling_params, system_prompt, ar
                 if stage == "evidence":
                     record["evidence"] = parse_evidence(raw, sample).model_dump()
                 else:
-                    trace = parse_stage2_response(raw, load_sample_evidence(sample, evidence_records))
-                    if trace.image_id != image_id:
-                        raise ValueError("generated image_id does not match the requested sample")
+                    evidence = load_sample_evidence(sample, evidence_records)
+                    if image_id in fixed_traces:
+                        repair = ProseRepair.model_validate_json(json_payload(raw))
+                        trace = fixed_traces[image_id].model_copy(update={"inspection_text": repair.inspection_text})
+                    else:
+                        trace = parse_stage2_response(raw, evidence)
+                    if contradicts_inspection_conclusion(trace.inspection_text, trace.inspection_conclusion):
+                        errors = ["Make the whole-object conclusion in inspection_text agree with inspection_conclusion, using verified image evidence."]
+                        feedback[image_id] = metadata["errors"] = errors
+                        next_pending.append(sample)
+                        continue
+                    expected = "anomalous" if sample["is_anomaly"] else "normal"
+                    review_error = None
+                    if trace.inspection_conclusion != expected:
+                        review_error = f"inspection_conclusion: {trace.inspection_conclusion}; dataset label: {expected}; review required"
+                    else:
+                        review_error = inspection_support_error(trace, evidence, sample)
+                    if review_error:
+                        # Preserve insufficient or conflicting evidence without retrying toward the label.
+                        errors = [review_error]
+                        metadata["errors"] = errors
+                        append_failure(sample, stage, errors, raw, args.shard_id, histories[image_id],
+                                       failure_log=args.failure_log)
+                        held_for_review += 1
+                        continue
                     reasoning = assemble_reasoning(trace.inspection_text, sample)
                     validation = validate_evidence_first_reasoning(reasoning, sample, min_iou=args.min_location_iou)
                     if not validation.valid:
+                        if validation.errors and all(error in PROSE_SOURCE_ERRORS for error in validation.errors):
+                            fixed_traces[image_id] = trace
                         feedback[image_id] = validation.errors
                         metadata["errors"] = validation.errors
                         next_pending.append(sample)
                         continue
                     record.update({
                         "inspection_text": trace.inspection_text.strip(),
+                        "inspection_conclusion": trace.inspection_conclusion,
+                        "supporting_region_index": trace.supporting_region_index if expected == "anomalous" else None,
                         "reasoning": reasoning, "validation": validation.to_dict(),
-                        "quality_warnings": (["inspection_text outside the soft 80-120 word target; review explanatory completeness"]
-                                             if not 80 <= validation.word_count <= 120 else []),
                         "evidence_review": [item.model_dump() for item in trace.evidence_review],
                         "supervision_fields_source": "manifest_gt",
-                        "teacher_bbox_coordinates_exposed": sample["is_anomaly"],
+                        "teacher_bbox_coordinates_exposed": False,
                         "evidence_file": str(collection_path("evidence", sample["dataset"])),
                     })
                 records[image_id] = record
                 metadata["errors"] = []
             except Exception as error:
-                if str(error).startswith(("truncated output", "repetitive output", "evidence_review")):
+                if isinstance(error, EvidenceCueLeakage):
+                    feedback[image_id] = [BBOX_CUE_ERROR, *(f"{BBOX_CUE_ERROR} in {field}" for field in error.fields)]
+                elif str(error) == BBOX_CUE_ERROR or str(error) in EVIDENCE_RETRY_GUIDANCE or str(error).startswith(
+                    ("truncated output", "repetitive output", "evidence_review")
+                ):
                     feedback[image_id] = [str(error)]
                 elif isinstance(error, ValidationError) and any(item["type"] == "json_invalid" for item in error.errors()):
                     feedback[image_id] = ["repetitive output" if has_repetition(raw) else "invalid JSON output; return a complete JSON object with escaped string characters"]
@@ -406,7 +589,7 @@ def process_chunk(samples, engine, processor, sampling_params, system_prompt, ar
     for sample in pending:
         append_failure(sample, stage, feedback[sample["id"]], last_outputs.get(sample["id"], ""), args.shard_id,
                        histories.get(sample["id"], []), failure_log=args.failure_log)
-    return saved, len(pending)
+    return saved, held_for_review + len(pending)
 
 
 def parse_args(argv=None):
@@ -484,7 +667,7 @@ def main(argv=None) -> int:
     logger.info("assigned remaining samples: %d; stage=%s", len(samples), args.stage)
     logger.info("sampling: cot_temperature=%s evidence_temperature=%s presence_penalty=%s repetition_penalty=%s cot_max_tokens=%s",
                 args.temperature, args.evidence_temperature, args.presence_penalty, args.repetition_penalty, args.max_new_tokens)
-    processor, engine, failures = None, None, 0
+    processor, engine, failures, blocked_on_evidence = None, None, 0, 0
     for stage in (["evidence", "cot"] if args.stage == "all" else [args.stage]):
         system_prompt = (config.STAGE1_PROMPT_PATH if stage == "evidence" else config.STAGE2_PROMPT_PATH).read_text(encoding="utf-8")
         sampling_params = None
@@ -493,19 +676,19 @@ def main(argv=None) -> int:
             # in the same process. This is also the independent cot-only path.
             evidence_records = read_records(collection_path("evidence", dataset), dataset)
             pending = []
+            blocked = 0
             for sample in samples:
                 if sample["dataset"] != dataset:
                     continue
                 if stage == "evidence" and has_evidence(sample, evidence_records):
                     continue
                 if stage == "cot" and not has_evidence(sample, evidence_records):
-                    logger.warning("missing/invalid evidence: %s", sample["id"])
-                    if not args.debug:
-                        append_failure(sample, stage, ["missing/invalid Stage 1 evidence; run --stage evidence or --stage all"], "", args.shard_id,
-                                       failure_log=args.failure_log)
-                        failures += 1
+                    blocked += 1
                     continue
                 pending.append(sample)
+            if blocked:
+                logger.warning("%s: %d CoT samples waiting for valid Stage 1 evidence", dataset, blocked)
+                blocked_on_evidence += blocked
             if not pending:
                 continue
             if processor is None:
@@ -533,8 +716,9 @@ def main(argv=None) -> int:
                     )
                     failures += failed
                     progress.update(saved + failed)
-    logger.info("finished; stage failures=%d", failures)
-    return 1 if failures else 0
+    logger.info("finished; generation failures=%d; CoT samples waiting for Stage 1 evidence=%d",
+                failures, blocked_on_evidence)
+    return 1 if failures or (blocked_on_evidence and not args.debug) else 0
 
 
 if __name__ == "__main__":

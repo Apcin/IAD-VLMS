@@ -31,13 +31,25 @@ PICTURE_REFERENCE_PATTERN = re.compile(
 )
 VIEW_IDENTIFIER_ERROR = "view identifier in descriptive text"
 VIEW_IDENTIFIER_PATTERN = re.compile(r"\bview[_ -]?ids?\b|\bview_\d+\b", re.IGNORECASE)
+BBOX_CUE_ERROR = "bbox-cue leakage"
+BBOX_CUE_PATTERN = re.compile(
+    r"\b(?:bounding (?:box(?:es)?|rectangles?)|bbox(?:es)?"
+    r"|(?:annotation|localization) (?:cues?|overlays?|outlines?|box(?:es)?))\b"
+    r"|\b(?:red|drawn|provided|highlighted|marked) (?:box(?:es)?|rectangles?)\b"
+    r"|\b(?:outline|box) cues?\b|\b(?:drawn|overlaid) (?:outlines?|borders?)\b"
+    r"|\b(?:lacks?|without|no) (?:the |a )?red outlines?\b",
+    re.IGNORECASE,
+)
 FORBIDDEN_PATTERNS = {
     "annotation leakage": (
         r"\b(?:ground[ -]?truth|annotation|metadata|supervision)\b"
         r"|\b(?:canonical|supplied|provided)\s+(?:(?:anomaly|defect)\s+)?(?:type|label|category)\b"
     ),
-    "mask leakage": r"\b(?:segmentation )?mask\b",
-    "bbox-cue leakage": r"\b(?:red|drawn|provided|highlighted) (?:box|bounding box|rectangle)\b",
+    "mask leakage": (
+        r"\b(?:segmentation|annotation|ground[ -]?truth|gt|binary|defect|anomaly|provided|supplied)\s+masks?\b"
+        r"|\bmasks?\s+(?:images?|overlays?)\b"
+    ),
+    BBOX_CUE_ERROR: BBOX_CUE_PATTERN.pattern,
     "reference leakage": (
         r"\b(?:normal|reference|comparison)\s+(?:images?|pictures?|views?|samples?|photographs?)\b"
         r"|\bnormal\s+references?\b|\b(?:provided|supplied)\s+normal\b"
@@ -46,7 +58,7 @@ FORBIDDEN_PATTERNS = {
     ),
     "coordinate leakage": (
         r"[\[(]\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*\d+\s*[\])]"
-        r"|\b(?:bbox|pixel[ -]coordinates?|location[ -]coordinates?)\b"
+        r"|\b(?:pixel[ -]coordinates?|location[ -]coordinates?)\b"
         r"|\b(?:provided|supplied|given)\s+coordinates?\b"
     ),
     "pipeline leakage": r"\bevidence_review\b|\bevidence\s+(?:json|record)\b|\b(?:earlier|previous)\s+stage\b",
@@ -204,14 +216,42 @@ def validate_evidence_first_reasoning(reasoning: str, sample: dict, *, min_iou: 
     return result
 
 
-def retry_feedback(errors: list[str]) -> str:
-    """Return corrective feedback; the original prompt already contains the GT hint."""
+def contradicts_inspection_conclusion(inspection_text: str, conclusion: str) -> bool:
+    """Catch direct whole-object contradictions in the final English sentence."""
+    sentence = re.split(r"(?<=[.!?])\s+", inspection_text.strip())[-1].rstrip(".!?").lower()
+    if re.search(r"\b(?:although|but|despite|except|however|otherwise|yet)\b", sentence):
+        return False
+    judgment_subject = r"(?:this|these (?:findings|observations|features)|the (?:findings|observations|features))"
+    if conclusion == "anomalous":
+        return bool(re.fullmatch(
+            r"(?:overall,? )?(?:(?:there (?:is|are) )?no (?:visible )?(?:defects?|anomalies)"
+            r"(?: (?:are|is) (?:visible|evident))?|"
+            r"the (?:object|item|sample) (?:appears|is) (?:normal|undamaged|defect[- ]free)|"
+            rf"{judgment_subject} (?:supports?|indicates?) (?:a )?normal (?:condition|classification|judg(?:e)?ment))",
+            sentence,
+        ) or re.match(
+            r"(?:the )?overall condition (?:suggests?|indicates?) (?:an? )?(?:standard,\s*)?"
+            r"undamaged (?:object|item|sample)\b", sentence,
+        ))
+    if conclusion == "normal":
+        return bool(re.fullmatch(
+            rf"{judgment_subject} (?:supports?|indicates?|confirms?) "
+            r"(?:an? )?(?:anomalous (?:condition|classification|judg(?:e)?ment)|defect)",
+            sentence,
+        ))
+    return False
+
+
+def retry_feedback(errors: list[str], *, evidence_first: bool = False) -> str:
+    """Return corrective feedback without leaking supervision to Stage 2."""
     safe = []
     for error in errors:
         if error == "reference leakage":
             safe.append("Remove all mentions of normal/reference/comparison inputs from <think>; retain supported observations and describe only the inspected object.")
         elif error == "annotation leakage":
             safe.append("Remove supervision sources, canonical-type wording and supplied-label references from <think>; describe visible morphology without citing labels.")
+        elif error == BBOX_CUE_ERROR:
+            safe.append("Use the localization cue only to find the area. Describe the object in the clean query and compare the same physical area in the reference.")
         elif error == "coordinate leakage":
             safe.append("Remove coordinate lists and coordinate commentary from <think>; keep required coordinates only in <location> and use spatial descriptions in the inspection prose.")
         elif error == "pipeline leakage":
@@ -220,18 +260,23 @@ def retry_feedback(errors: list[str]) -> str:
             safe.append("Return a complete JSON object. Remove looping passages while preserving distinct visual facts and the explanation connecting them to the conclusion. State each point once.")
         elif error == "placeholder inspection text":
             safe.append("Replace placeholder wording with actual visible observations, an explanation of their inspection significance and a supported conclusion.")
+        elif error.startswith("evidence_review must cover every region_index"):
+            safe.append(error + ". Copy the listed region_index values and combine each region's findings into one entry.")
         elif error.startswith("evidence_review"):
             safe.append("Return exactly one evidence_review entry for every listed region_index, without duplicates or omissions; use keep, revise or uncertain and retain the verified facts needed for the inspection judgment.")
         elif "word count" in error:
-            safe.append(f"{error}. Rewrite the inspection within that limit, aiming for 80-120 words where applicable; preserve key evidence, its significance and the conclusion, without padding or repetition.")
+            if evidence_first:
+                safe.append(f"{error}. Keep the key evidence and conclusion within the word limit.")
+            else:
+                safe.append(f"{error}. Rewrite the inspection within that limit, aiming for 80-120 words where applicable; preserve key evidence, its significance and the conclusion, without padding or repetition.")
         elif error == PICTURE_REFERENCE_ERROR:
             safe.append("Remove picture numbers and input-order references from <think>; describe the query directly.")
         elif error == VIEW_IDENTIFIER_ERROR:
-            safe.append("Remove view identifiers from <think>; retain required view_id values only in <location>.")
+            safe.append("Remove view identifiers from the final prose." if evidence_first else
+                        "Remove view identifiers from <think>; retain required view_id values only in <location>.")
         elif "IoU greater than" in error or "view IDs" in error or "outside" in error:
-            safe.append(
-                "Re-inspect every boxed query view and use the supplied location hint to output a highly consistent bbox in the original image frame."
-            )
+            if not evidence_first:
+                safe.append("Re-inspect every boxed query view and use the supplied location hint to output a highly consistent bbox in the original image frame.")
         else:
             safe.append(error)
     return "Previous output failed validation. Correct these issues without discussing validation: " + "; ".join(dict.fromkeys(safe))

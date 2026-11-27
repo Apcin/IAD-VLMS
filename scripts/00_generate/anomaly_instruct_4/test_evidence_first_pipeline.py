@@ -30,21 +30,28 @@ def evidence_value(view_id="query", visibility="clear"):
 
 
 def evidence_record(sample):
+    boxes = sample["supervision"]["bboxes"]
+    view_id = boxes[0]["view_id"] if boxes else sample["query_images"][0]["view_id"]
     return {"image_id": sample["id"], "dataset": sample["dataset"],
-            "evidence": evidence_value(sample["query_images"][0]["view_id"], "not_visible")}
+            "evidence": evidence_value(view_id, "not_visible")}
 
 
 def model_value(sample, *, words=90, regions=1):
-    return {"image_id": sample["id"], "evidence_review": [
-        {"region_index": index, "decision": "uncertain",
-         "verified_observation": "Reflection limits inspection of the local contour."}
+    anomaly = sample["is_anomaly"]
+    return {"evidence_review": [
+        {"region_index": index, "decision": "revise",
+         "verified_observation": ("The upper rim bends inward at one spot." if anomaly else
+                                  "The inspected rim has a continuous, even contour.")}
         for index in range(regions)
-    ], "inspection_text": " ".join(f"visible{index}" for index in range(words))}
+    ], "inspection_conclusion": "anomalous" if anomaly else "normal",
+        "supporting_region_index": 0 if anomaly else None,
+        "inspection_text": " ".join(f"visible{index}" for index in range(words))}
 
 
 def trace_value(sample, **kwargs):
     value = model_value(sample, **kwargs)
-    return {**value, "reasoning": generation.assemble_reasoning(value["inspection_text"], sample)}
+    return {**value, "image_id": sample["id"],
+            "reasoning": generation.assemble_reasoning(value["inspection_text"], sample)}
 
 
 class ProcessorStub:
@@ -128,19 +135,38 @@ class EvidenceFirstTests(unittest.TestCase):
                 self.assertIn("view_id=" + sample["query_images"][0]["view_id"], prompt)
                 self.assertNotIn("image_id", generation.VisualEvidence.model_json_schema()["properties"])
                 self.assertTrue(processor.template_kwargs[-1]["add_vision_id"])
+                self.assertNotIn("centered near", prompt)
+                if anomaly:
+                    view_id = sample["supervision"]["bboxes"][0]["view_id"]
+                    self.assertIn(f"Priority views with marked areas: {view_id}.", prompt)
+                else:
+                    self.assertNotIn("Priority views with marked areas", prompt)
                 if modality == "3d_multiview" and anomaly:
                     self.assertIn("Picture 1: clean original query (view_id=view_000)", prompt)
                     self.assertIn("Picture 2: localization cue (view_id=view_000)", prompt)
                     self.assertIn("Picture 3: same-category normal reference (view_id=view_000)", prompt)
-                    self.assertIn("prioritizing that region when present", prompt)
 
     def test_evidence_preserves_uncertainty_and_view_mapping(self):
         sample = self.prepared_sample("3d_multiview")
         value = evidence_value("view_000", "not_visible")
+        with self.assertRaisesRegex(ValueError, generation.FOCUS_COVERAGE_ERROR):
+            generation.parse_evidence(json.dumps(value), sample)
+        marked = evidence_value("view_017")["regional_observations"][0]
+        marked["query_evidence"] = []
+        value["regional_observations"].append(marked)
+        with self.assertRaisesRegex(ValueError, generation.FOCUS_COVERAGE_ERROR):
+            generation.parse_evidence(json.dumps(value), sample)
+        marked["visibility"] = "not_visible"
+        limit = marked["uncertainty"]
+        marked["uncertainty"] = "none"
+        with self.assertRaisesRegex(ValueError, generation.FOCUS_COVERAGE_ERROR):
+            generation.parse_evidence(json.dumps(value), sample)
+        marked["uncertainty"] = limit
         self.assertEqual(generation.parse_evidence(json.dumps(value), sample).model_dump(), value)
         # view_000 has a cue image, but only view_017 has an actual GT box.
         text = generation.format_stage1_user_prompt(sample)
         self.assertIn("view_id=view_000", text)
+        self.assertIn("Priority views with marked areas: view_017.", text)
         self.assertNotIn("view_017 is anomalous", text)
         value["regional_observations"][0]["view_id"] = "view_999"
         with self.assertRaises(ValueError):
@@ -150,7 +176,7 @@ class EvidenceFirstTests(unittest.TestCase):
         for modality in ("2d", "3d_multiview"):
             for anomaly in (False, True):
                 sample = self.prepared_sample(modality, anomaly)
-                value = evidence_value(sample["query_images"][0]["view_id"])
+                value = evidence_record(sample)["evidence"]
                 value["regional_observations"].append(copy.deepcopy(value["regional_observations"][0]))
                 for mention in ("See Picture 3.", "Compared to the normal reference (view_id=query).", "view_017"):
                     for field in ("object_observation", "region", "query_evidence", "normal_comparison", "uncertainty"):
@@ -170,7 +196,8 @@ class EvidenceFirstTests(unittest.TestCase):
         value["regional_observations"][0]["normal_comparison"] = "See Picture 3: the corresponding contour is more even."
         processor = ProcessorStub()
         args = generation.parse_args(["--max-retries", "2"])
-        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+        with patch.object(generation.baseline, "open_rgb", return_value=object()), \
+             patch.object(generation, "make_sampling_params", return_value=SimpleNamespace(max_tokens=2048)):
             self.assertEqual(generation.process_chunk([sample], EngineStub([json.dumps(value)]), processor, None,
                                                       "system", args, "evidence", {}), (1, 0))
             records = store.read_records(generation.collection_path("evidence", sample["dataset"]), sample["dataset"])
@@ -178,9 +205,16 @@ class EvidenceFirstTests(unittest.TestCase):
             good = model_value(sample)
             good["evidence_review"][0]["verified_observation"] = "The original edge is irregular compared to the normal reference."
             bad = {**good, "inspection_text": "See Picture 3. " + good["inspection_text"]}
-            self.assertEqual(generation.process_chunk([sample], EngineStub([json.dumps(bad), json.dumps(good)]),
-                                                      processor, None, "system", args, "cot", records), (1, 0))
+            repair = {"inspection_text": good["inspection_text"]}
+            engine = EngineStub([json.dumps(bad), json.dumps(repair)])
+            self.assertEqual(generation.process_chunk([sample], engine, processor, None, "system", args, "cot", records),
+                             (1, 0))
             self.assertIn("Remove picture numbers", processor.messages[-1][1]["content"][-1]["text"])
+            self.assertIn("multi_modal_data", engine.requests[0][0])
+            self.assertNotIn("multi_modal_data", engine.requests[1][0])
+            trace = store.read_records(generation.collection_path("cot", sample["dataset"]), sample["dataset"])[sample["id"]]
+            self.assertEqual(trace["evidence_review"], good["evidence_review"])
+            self.assertEqual(trace["inspection_conclusion"], good["inspection_conclusion"])
         prompt = generation.format_stage1_user_prompt(sample, ["private /broken/123.png [101,52,203,177]"])
         self.assertNotIn("/broken/123.png", prompt)
         self.assertNotIn("[101,52,203,177]", prompt)
@@ -194,14 +228,130 @@ class EvidenceFirstTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown query view_id"):
             generation.parse_evidence(json.dumps(value), sample)
 
+    def test_stage1_retries_definitive_comparison_judgments(self):
+        sample = self.prepared_sample()
+        good = evidence_value()
+        good["regional_observations"][0]["normal_comparison"] = (
+            "The corresponding edge is continuous. This view does not confirm damage."
+        )
+        bad = copy.deepcopy(good)
+        for verdict in ("The comparison confirms the presence of damage in the query.",
+                        "This confirms that the irregular edge in the query is an anomaly."):
+            bad["regional_observations"][0]["normal_comparison"] = verdict
+            with self.assertRaisesRegex(ValueError, generation.COMPARISON_VERDICT_ERROR):
+                generation.parse_evidence(json.dumps(bad), sample)
+        processor = ProcessorStub()
+        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+            result = generation.process_chunk(
+                [sample], EngineStub([json.dumps(bad), json.dumps(good)]), processor, None,
+                "system", generation.parse_args(["--max-retries", "2"]), "evidence", {},
+            )
+        self.assertEqual(result, (1, 0))
+        self.assertIn("Rewrite normal_comparison", processor.messages[-1][1]["content"][-1]["text"])
+        records = store.read_records(generation.collection_path("evidence", sample["dataset"]), sample["dataset"])
+        self.assertEqual(records[sample["id"]]["evidence"], good)
+
+    def test_stage1_retries_region_and_comparison_placeholders(self):
+        sample = self.prepared_sample()
+        good = evidence_value()
+        observation = good["regional_observations"][0]
+        observation["region"] = "Upper-left edge of the opening"
+        observation["normal_comparison"] = "The corresponding edge is hidden by reflection in the reference."
+        invalid = []
+        for field, placeholder, error in (
+            ("region", "centered near the middle row, center column of the full query", generation.REGION_LOCATOR_ERROR),
+            ("region", "red box", generation.BBOX_CUE_ERROR),
+            ("normal_comparison", "Not applicable; this is a defect observation in the query view.", generation.COMPARISON_CONTENT_ERROR),
+            ("normal_comparison", "N/A", generation.COMPARISON_CONTENT_ERROR),
+        ):
+            bad = copy.deepcopy(good)
+            bad["regional_observations"][0][field] = placeholder
+            with self.subTest(field=field, placeholder=placeholder):
+                with self.assertRaisesRegex(ValueError, error):
+                    generation.parse_evidence(json.dumps(bad), sample)
+            invalid.append(bad)
+        processor = ProcessorStub()
+        engine = EngineStub([json.dumps(item) for item in (invalid[0], invalid[2], good)])
+        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+            result = generation.process_chunk(
+                [sample], engine, processor, None, "system",
+                generation.parse_args(["--max-retries", "3"]), "evidence", {},
+            )
+        self.assertEqual(result, (1, 0))
+        self.assertIn("Name the inspected part or area in region", engine.requests[1][0]["prompt"])
+        self.assertIn("Compare the same part in query and reference", engine.requests[2][0]["prompt"])
+        records = store.read_records(generation.collection_path("evidence", sample["dataset"]), sample["dataset"])
+        self.assertEqual(records[sample["id"]]["evidence"], good)
+
     def test_stage1_region_wording_is_not_a_rejection_rule(self):
         for modality in ("2d", "3d_multiview"):
             for anomaly in (False, True):
                 sample = self.prepared_sample(modality, anomaly)
-                value = evidence_value(sample["query_images"][0]["view_id"])
-                for region in ("Upper rim", "The upper rim shows an angular interruption.", "Outer edge exhibiting uneven texture."):
+                value = evidence_record(sample)["evidence"]
+                for region in ("Upper rim", "The upper rim shows an angular interruption.",
+                               "Outer edge exhibiting uneven texture.", "lower-left quadrant", "central area"):
                     value["regional_observations"][0]["region"] = region
                     self.assertEqual(generation.parse_evidence(json.dumps(value), sample).model_dump(), value)
+
+    def test_stage1_removes_only_a_trailing_cue_from_a_located_region(self):
+        sample = self.prepared_sample()
+        clean = evidence_value()
+        clean["regional_observations"][0]["region"] = "Upper-left edge of the opening"
+        raw = copy.deepcopy(clean)
+        tail = ", as indicated by the red box in Picture 2."
+        raw["regional_observations"][0]["region"] += tail
+        self.assertEqual(generation.parse_evidence(json.dumps(raw), sample).model_dump(), clean)
+        raw["regional_observations"][0]["region"] = "The highlighted area" + tail
+        with self.assertRaisesRegex(ValueError, generation.BBOX_CUE_ERROR):
+            generation.parse_evidence(json.dumps(raw), sample)
+
+    def test_stage1_retry_names_the_fields_with_cue_leakage(self):
+        sample = self.prepared_sample()
+        good = evidence_value()
+        bad = copy.deepcopy(good)
+        observation = bad["regional_observations"][0]
+        observation["query_evidence"] = ["The edge follows the red box."]
+        observation["normal_comparison"] = "The reference lacks the red outline cue."
+        engine = EngineStub([json.dumps(bad), json.dumps(good)])
+        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+            result = generation.process_chunk(
+                [sample], engine, ProcessorStub(), None, "system",
+                generation.parse_args(["--max-retries", "2"]), "evidence", {},
+            )
+        self.assertEqual(result, (1, 0))
+        prompt = engine.requests[1][0]["prompt"]
+        self.assertIn("Rewrite query_evidence using the clean query", prompt)
+        self.assertIn("Redo normal_comparison using the clean query and the listed same-category normal reference", prompt)
+        self.assertNotIn("The reference lacks the red outline cue.", prompt)
+        records = store.read_records(generation.collection_path("evidence", sample["dataset"]), sample["dataset"])
+        self.assertEqual(records[sample["id"]]["generation_attempts"][0]["errors"], [
+            generation.BBOX_CUE_ERROR,
+            f"{generation.BBOX_CUE_ERROR} in query_evidence",
+            f"{generation.BBOX_CUE_ERROR} in normal_comparison",
+        ])
+
+    def test_annotation_cues_are_rejected_in_descriptive_fields(self):
+        sample = self.prepared_sample()
+        value = evidence_value()
+        value["regional_observations"][0]["query_evidence"] = ["A red printed stripe runs along the rim."]
+        evidence = generation.parse_evidence(json.dumps(value), sample)
+        leaked = "The reference lacks the red outline cue."
+        for field in ("object_observation", "region", "query_evidence", "normal_comparison", "uncertainty"):
+            bad = copy.deepcopy(value)
+            target = bad if field == "object_observation" else bad["regional_observations"][0]
+            target[field] = [leaked] if field == "query_evidence" else leaked
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, generation.BBOX_CUE_ERROR):
+                generation.parse_evidence(json.dumps(bad), sample)
+        trace = trace_value(sample)
+        trace["evidence_review"][0]["verified_observation"] = leaked
+        model_fields = generation.EvidenceAnchoredTrace.model_fields
+        raw = json.dumps({field: trace[field] for field in model_fields})
+        with self.assertRaisesRegex(ValueError, generation.BBOX_CUE_ERROR):
+            generation.parse_stage2_response(raw, evidence)
+        records = {sample["id"]: {**trace, "dataset": sample["dataset"]}}
+        self.assertFalse(generation.has_trace(sample, records, 0.9))
+        result = generation.validate_evidence_first_reasoning(generation.assemble_reasoning(leaked, sample), sample)
+        self.assertIn(generation.BBOX_CUE_ERROR, result.errors)
 
     def test_stage1_preserves_useful_evidence_without_wording_retry(self):
         sample = self.prepared_sample()
@@ -357,6 +507,9 @@ class EvidenceFirstTests(unittest.TestCase):
             # cot-only never silently runs Stage 1 for shard 1's missing evidence.
             self.assertEqual(generation.main(["--stage", "cot", "--datasets", dataset,
                                               "--total-shards", "2", "--shard-id", "1"]), 1)
+            self.assertFalse((config.EVIDENCE_FIRST_TRACE_DIR / "failed" / "cot_shard_1.jsonl").exists())
+            log = (config.LOG_DIR / "evidence_first_shard_1.log").read_text()
+            self.assertIn("generation failures=0; CoT samples waiting for Stage 1 evidence=2", log)
 
     def test_stage2_all_formats_use_images_and_existing_validator(self):
         for modality in ("2d", "3d_multiview"):
@@ -370,12 +523,15 @@ class EvidenceFirstTests(unittest.TestCase):
                     )
                 self.assertTrue(request["multi_modal_data"]["image"])
                 self.assertTrue(processor.template_kwargs[-1]["add_vision_id"])
-                branch = "NORMAL" if not anomaly else ("ANOMALOUS_2D" if modality == "2d" else "ANOMALOUS_MULTIVIEW")
-                self.assertIn("Required response branch: " + branch, request["prompt"])
+                for private in (sample["id"], "Ground Truth:", "Required response branch:",
+                                "Canonical anomaly type:", "[101,52,203,177]"):
+                    self.assertNotIn(private, request["prompt"])
                 if modality == "3d_multiview" and anomaly:
                     self.assertIn("Picture 1: clean original query (view_id=view_000)", request["prompt"])
                     self.assertIn("Picture 2: localization cue (view_id=view_000)", request["prompt"])
                     self.assertIn("Picture 3: same-category normal reference (view_id=view_000)", request["prompt"])
+                    self.assertIn("Priority views with marked areas: view_017.", request["prompt"])
+                    self.assertNotIn("centered near", request["prompt"])
                 self.assertTrue(generation.validate_evidence_first_reasoning(trace_value(sample)["reasoning"], sample, min_iou=0.9).valid)
 
     def test_default_full_run_single_engine_disk_handoff_and_resume(self):
@@ -428,9 +584,9 @@ class EvidenceFirstTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             generation.parse_evidence(json.dumps(invalid_evidence), self.prepared_sample())
         schema = cot["structured_outputs"]["json"]
-        self.assertEqual(schema["required"], ["image_id", "evidence_review", "inspection_text"])
+        self.assertEqual(schema["required"], ["evidence_review", "inspection_conclusion", "supporting_region_index", "inspection_text"])
         self.assertNotIn("pattern", schema["properties"]["inspection_text"])
-        self.assertIn("80-120", schema["properties"]["inspection_text"]["description"])
+        self.assertIn("130", schema["properties"]["inspection_text"]["description"])
         self.assertNotIn("reasoning", schema["properties"])
         self.assertEqual((cot["temperature"], cot["presence_penalty"], cot["repetition_penalty"]), (0.2, 0, 1.05))
         self.assertEqual(evidence["max_tokens"], 2048)
@@ -441,9 +597,10 @@ class EvidenceFirstTests(unittest.TestCase):
                 sample = self.prepared_sample(modality, anomaly)
                 evidence = generation.load_sample_evidence(sample, {sample["id"]: evidence_record(sample)})
                 prompt = generation.format_stage2_user_prompt(sample, evidence)
-                self.assertIn("inspection_text", prompt)
-                self.assertIn("Aim for 80-120", prompt)
-                self.assertIn("how it supports the conclusion", prompt)
+                self.assertIn("regional_observations", prompt)
+                self.assertIn('"region_index": 0', prompt)
+                self.assertIn(f'"priority_view": {str(anomaly).lower()}', prompt)
+                self.assertNotIn(evidence.object_observation, prompt)
                 self.assertNotIn("short plain-text", prompt)
                 self.assertNotIn("WRITE_", prompt)
                 self.assertNotIn('"decision": "keep"', prompt)
@@ -507,13 +664,21 @@ class EvidenceFirstTests(unittest.TestCase):
         trace["evidence_review"][0]["decision"] = "revise"
         parsed = generation.parse_stage2_response(json.dumps(trace), evidence)
         self.assertEqual(parsed.evidence_review[0].decision, "revise")
-        for indices in ([0], [0, 0], [0, 2]):
+        for indices, details in (
+            ([0], ("missing region_index 1",)),
+            ([0, 0], ("missing region_index 1", "duplicate region_index 0")),
+            ([0, 2], ("missing region_index 1", "unexpected region_index 2")),
+        ):
             invalid = copy.deepcopy(trace)
             invalid["evidence_review"] = [
                 {**trace["evidence_review"][0], "region_index": index} for index in indices
             ]
-            with self.subTest(indices=indices), self.assertRaisesRegex(ValueError, "evidence_review"):
-                generation.parse_stage2_response(json.dumps(invalid), evidence)
+            with self.subTest(indices=indices):
+                with self.assertRaisesRegex(ValueError, "evidence_review") as error:
+                    generation.parse_stage2_response(json.dumps(invalid), evidence)
+                prompt = generation.format_stage2_user_prompt(sample, evidence, [str(error.exception)])
+                for detail in details:
+                    self.assertIn(detail, prompt)
 
     def test_word_limits_and_resume_in_all_four_branches(self):
         for modality in ("2d", "3d_multiview"):
@@ -618,7 +783,7 @@ class EvidenceFirstTests(unittest.TestCase):
         self.assertEqual(saved["supervision_fields_source"], "manifest_gt")
         self.assertIn("preserving distinct visual facts", processor.messages[-1][1]["content"][-1]["text"])
 
-    def test_soft_word_target_adds_review_warning_without_rejecting_valid_prose(self):
+    def test_short_and_long_valid_prose_can_be_saved(self):
         sample = self.prepared_sample()
         records = {sample["id"]: evidence_record(sample)}
         with patch.object(generation.baseline, "open_rgb", return_value=object()):
@@ -630,8 +795,87 @@ class EvidenceFirstTests(unittest.TestCase):
                     saved = store.read_records(generation.collection_path("cot", sample["dataset"]), sample["dataset"])
                     record = saved[sample["id"]]
                     self.assertTrue(record["validation"]["valid"])
-                    self.assertEqual(bool(record["quality_warnings"]), not 80 <= words <= 120)
+                    self.assertEqual(record["inspection_conclusion"], "anomalous")
+                    self.assertEqual(record["supporting_region_index"], 0)
                     self.assertTrue(generation.has_trace(sample, saved, 0.9))
+
+    def test_stage2_holds_anomalous_conclusion_without_verified_annotated_view(self):
+        sample = self.prepared_sample("3d_multiview")
+        record = evidence_record(sample)
+        regions = record["evidence"]["regional_observations"]
+        regions.append(evidence_value("view_000")["regional_observations"][0])
+        for index, decision, error in (
+            (None, "revise", "requires a valid supporting_region_index"),
+            (0, "uncertain", "lacks a verified query observation"),
+            (0, "keep", "lacks a verified query observation"),
+            (1, "revise", "outside the annotated query views"),
+        ):
+            with self.subTest(index=index, decision=decision):
+                value = model_value(sample, regions=2)
+                value["supporting_region_index"] = index
+                value["evidence_review"][0]["decision"] = decision
+                engine = EngineStub([json.dumps(value)])
+                with patch.object(generation.baseline, "open_rgb", return_value=object()):
+                    result = generation.process_chunk(
+                        [sample], engine, ProcessorStub(), None, "system",
+                        generation.parse_args(["--max-retries", "2"]), "cot", {sample["id"]: record},
+                    )
+                self.assertEqual(result, (0, 1))
+                self.assertEqual(len(engine.requests), 1)
+                failures = config.EVIDENCE_FIRST_TRACE_DIR / "failed" / "cot_shard_0.jsonl"
+                self.assertIn(error, failures.read_text().splitlines()[-1])
+                self.assertFalse(generation.collection_path("cot", sample["dataset"]).exists())
+
+    def test_stage2_holds_normal_conclusion_when_no_region_is_verified(self):
+        sample = self.prepared_sample(anomaly=False)
+        evidence = evidence_record(sample)
+        value = model_value(sample)
+        value["evidence_review"][0].update(decision="uncertain", verified_observation="Reflection hides the edge.")
+        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+            result = generation.process_chunk(
+                [sample], EngineStub([json.dumps(value)]), ProcessorStub(), None,
+                "system", generation.parse_args([]), "cot", {sample["id"]: evidence},
+            )
+        self.assertEqual(result, (0, 1))
+        failures = config.EVIDENCE_FIRST_TRACE_DIR / "failed" / "cot_shard_0.jsonl"
+        self.assertIn("normal conclusion requires a verified observation", failures.read_text())
+
+    def test_stage2_holds_label_disagreement_and_uncertainty_without_retry(self):
+        for modality in ("2d", "3d_multiview"):
+            for anomaly in (False, True):
+                with self.subTest(modality=modality, anomaly=anomaly):
+                    sample = self.prepared_sample(modality, anomaly)
+                    for conclusion in ("normal" if anomaly else "anomalous", "uncertain"):
+                        value = {**model_value(sample), "inspection_conclusion": conclusion}
+                        engine = EngineStub([json.dumps(value)])
+                        records = {sample["id"]: evidence_record(sample)}
+                        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+                            result = generation.process_chunk([sample], engine, ProcessorStub(), None,
+                                config.STAGE2_PROMPT_PATH.read_text(), generation.parse_args(["--max-retries", "2"]),
+                                "cot", records)
+                        self.assertEqual(result, (0, 1))
+                        self.assertEqual(len(engine.requests), 1)
+                        failures = (config.EVIDENCE_FIRST_TRACE_DIR / "failed" / "cot_shard_0.jsonl")
+                        self.assertIn(f"inspection_conclusion: {conclusion}", failures.read_text())
+                        self.assertFalse(generation.collection_path("cot", sample["dataset"]).exists())
+
+    def test_stage2_retries_prose_contradiction_but_allows_local_negative(self):
+        sample = self.prepared_sample()
+        good = {**model_value(sample),
+                "inspection_text": "The edge has a localized indentation. No cracks are visible."}
+        bad = {**good, "inspection_text": "The overall condition suggests a standard, undamaged object."}
+        engine = EngineStub([json.dumps(bad), json.dumps(good)])
+        with patch.object(generation.baseline, "open_rgb", return_value=object()):
+            result = generation.process_chunk([sample], engine, ProcessorStub(), None,
+                config.STAGE2_PROMPT_PATH.read_text(), generation.parse_args(["--max-retries", "2"]),
+                "cot", {sample["id"]: evidence_record(sample)})
+        self.assertEqual(result, (1, 0))
+        saved = store.read_records(generation.collection_path("cot", sample["dataset"]), sample["dataset"])
+        self.assertEqual(saved[sample["id"]]["attempt"], 2)
+        self.assertIn("No cracks are visible.", saved[sample["id"]]["reasoning"])
+        self.assertTrue(generation.contradicts_inspection_conclusion("These findings indicate a defect.", "normal"))
+        self.assertFalse(generation.contradicts_inspection_conclusion(
+            "The outer rim has no visible defects.", "anomalous"))
 
     def test_compilation_rejects_overlong_evidence_first_think(self):
         sample = self.prepared_sample()

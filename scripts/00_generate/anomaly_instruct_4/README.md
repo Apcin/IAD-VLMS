@@ -103,51 +103,46 @@ one frozen Qwen3-VL/vLLM engine. It reads the existing manifests unchanged.
 
 Stage 1 is type-blind and region-guided: it receives object category, neutral view
 IDs, image roles/dimensions, original queries, bbox cue images when available, and
-normal references. It receives no sample IDs, paths, binary answer, defect labels,
-source descriptions, masks, or textual GT coordinates. Bbox cues still originate
-from annotation, so this is not fully GT-blind. Stage 1 records concrete visual
-observations and uncertainty rather than a final diagnosis. Reference comparisons
-remain allowed. Picture/view mentions in prose and observation-style region wording
-are no longer rejection conditions; valid JSON and known structured view IDs are
-still required. Prefer concise spatial locators without discarding useful evidence.
+normal references. Both stages prioritize views with a GT box using the cue to
+locate the physical part in the full clean query. The cues originate from
+annotations. Stage 1 requires a visible observation or a stated visibility limit
+for each marked view. An area of a continuous surface can use a spatial label
+such as a quadrant. Both stages reject explicit references to annotation graphics
+in descriptive output. Stage 1 also retries placeholder comparisons and explicit
+defect verdicts in `normal_comparison`.
 
-Stage 2 rereads the persisted evidence, receives the same visual images plus the
-existing GT supervision, and reinspects the images before synthesizing an explained
-inspection assessment. The soft target is 80-120 English words; the hard maximum
-is 130, with no hard minimum. Overall condition, specific visible evidence, its
-inspection significance and the supported conclusion should be connected, rather
-than compressed into a caption. Stage 1 and the internal review preserve enough
-diagnostic detail for that assessment. Images take priority over evidence; supported evidence
-organizes reasoning; GT constrains the answer/type/location without establishing
-unseen visual details. Uncertain/not-visible evidence is retained, not filtered.
-The same Stage 2 model response outputs one `evidence_review` entry per candidate region:
-`region_index`, `decision` (`keep`, `revise`, or `uncertain`), and a sufficiently detailed
-`verified_observation`. Every region must be covered exactly once; all entries may
-be kept if supported. Internal comparisons are allowed in this review, which is
-saved for inspection but excluded from SFT. The response then supplies plain
-`inspection_text` describing the query alone. The program wraps this prose in
-`<think>` and assembles answer/type/location tags from existing manifest GT. These
-supervision fields are marked as GT-derived, not independent model predictions.
-Validation rejects auxiliary-source references, supervision wording, and coordinate
-commentary in `<think>`. Generation, resume, and evidence-first compilation all
-enforce the 130-word maximum. Overlong generations are retried, never truncated.
-Prose outside the soft 80-120 word target receives a `quality_warnings` entry for
-review, not rejection; warnings are not exported into SFT. Relevant knowledge of
-the sample's domain, supported by its category, images and task context, may explain
-structural, functional or other relevant significance. Observations remain distinct
-from interpretations, with uncertainty retained about the domain and unseen properties.
+Stage 2 rechecks a numbered list of Stage 1 regional observations against the
+same images. Annotation cues help locate a part in the clean query before the
+whole-object judgment. The response includes one `evidence_review` per region,
+an `inspection_conclusion` (`normal`, `anomalous`, or `uncertain`),
+a `supporting_region_index` for anomalous conclusions, and at most
+130 English words in `inspection_text`. Each review records the key verified
+observation, correction, or limitation.
+
+The program compares the visual conclusion to the manifest label before building
+`<think>` and attaching the manifest's answer/type/location tags. Disagreement
+and uncertainty go into the failure log for review. Clear contradictions in the
+last sentence can trigger a retry. Source mentions in an otherwise usable
+inspection paragraph trigger a text-only rewrite with the review and conclusion
+held fixed. A normal conclusion requires at least one verified observation.
+An anomalous conclusion requires a verified supporting region in a boxed query
+view when boxes are available.
+An unsupported selection goes into the failure log. Accepted traces keep the model's
+inspection conclusion and regional review as metadata. SFT uses the formatted
+reasoning. The visual and prose checks can reduce clear contradictions, while
+subtype, location, and other visual details still merit sample review.
 
 In both stages, pictures are grouped by view in the exact order clean query,
-optional localization cue, and same-view normal reference. Qwen's native
-`Picture N` labels are enabled. A cue only locates the region to inspect in the
-clean query; visual facts come from that clean query region, which is then compared
-with the corresponding structure in the same-view normal reference.
+optional localization cue, and the normal reference indexed by the same view ID.
+Qwen's native `Picture N` labels are enabled. Visual facts come from the clean
+query. Any supplied reference view showing the same part can support a comparison.
+If the part is unavailable in the reference views, the observation records that limit.
 
 ```text
 data/manifests/<dataset>.json
     -> Stage 1: VisualEvidence structured output
 data/evidence_qwen3vl8b/evidence_<dataset>.json
-    -> Stage 2: images + evidence + GT -> EvidenceAnchoredTrace + validation
+    -> Stage 2: images + evidence -> inspection conclusion -> compare with manifest label
 data/traces_qwen3vl8b_evidence_first/traces_<dataset>.json
     -> compile_traces.py --trace-source evidence-first
 data/compiled_evidence_first/<dataset>_cot_sft.json
@@ -223,7 +218,7 @@ python generate_traces_qwen3vl_evidence_first.py --datasets anomaly_shapenet mvt
 python generate_traces_qwen3vl_evidence_first.py --datasets mvtec_ad --normal-only --max-samples 4
 python generate_traces_qwen3vl_evidence_first.py --datasets real3d --anomaly-only --max-samples 4
 
-# Independent stages; cot-only uses existing evidence and never runs Stage 1.
+# Independent stages. Cot-only reports missing Stage 1 evidence separately.
 python generate_traces_qwen3vl_evidence_first.py --stage evidence
 python generate_traces_qwen3vl_evidence_first.py --stage cot
 
@@ -258,8 +253,9 @@ Qwen3-VL-capable Transformers installation). Generation defaults to the model pa
 in `config.py`; `--model` or `QWEN3VL_MODEL_PATH` overrides it. New output directories
 also honor `ANOMALY_INSTRUCT_WORK_DIR`.
 
-Rerun the same command after interruption: valid final traces are skipped, cached
-evidence is reused, and only missing/invalid results are generated. A successful
+Rerun the same command after interruption to reuse valid traces and cached
+evidence. Move both evidence-first output directories aside for a full
+regeneration with a new prompt or validation rule. A successful
 Stage 1 followed by a failed Stage 2 never triggers Stage 1 again. `--stage cot`
 reports missing/invalid evidence and exits nonzero rather than generating it.
 `--failure-log PATH` changes only the failure JSONL destination; successful traces
@@ -305,3 +301,18 @@ All model/download/compiler caches used by this pipeline are statically rooted a
 the repository-level `.cache/` directory by `config.py`; no shell exports are
 required after opening a new terminal. Set `IAD_VLMS_CACHE_ROOT` before launching
 Python only when an explicit alternative cache root is desired.
+
+## API evaluation and local review
+
+The separate `evaluate_cot_glm.py` entry point evaluates successful evidence-first
+CoTs for visual faithfulness and reasoning consistency using A6API's
+`qwen3.8-max` by default (`A6API_KEY`), with legacy GLM support via
+`--provider zhipu`. New A6API requests return two short judgments (100 Chinese
+characters combined, no scores, 512-token output budget), with compatible old
+assessments reused to avoid duplicate calls. `--batch-size` packs multiple samples
+into one request and combines with `--workers` request concurrency; partial
+successes are saved before retrying only unresolved samples. The local review app uses a paginated
+image gallery and a sample detail dialog with original images, GT overlays,
+structured CoTs, judgments, and manual notes. See
+[README_cot_evaluation.md](README_cot_evaluation.md) for API key configuration,
+commands, scoring rules, and storage details.

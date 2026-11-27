@@ -1,0 +1,127 @@
+/* Readable local sans-serif fonts; no external font requests are needed. */
+:root {
+  --bg: #f5f7f9;
+  --ink: #263330;
+  --muted: #596b64;
+  --line: #dce4df;
+  --reading-font: "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC", "WenQuanYi Micro Hei", "Segoe UI", Arial, sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono CJK SC", monospace;
+}
+body { font-family: var(--reading-font); font-size: 15px; font-weight: 500; line-height: 1.75; }
+button, input, select, textarea { font-family: inherit; }
+strong, b { font-weight: 750; }
+input::placeholder, textarea::placeholder { color: #718178; opacity: 1; }
+.topbar, main, footer { position: relative; z-index: 1; }
+.topbar { background: #fffffff5; }
+.brand { font-size: 27px; font-weight: 800; }
+.brand small { font-size: 12px; font-weight: 600; letter-spacing: .5px; }
+.topbar nav { font-size: 15px; font-weight: 650; }
+.connection { font-size: 13px; font-weight: 550; }
+.connection button { font-size: 13px; font-weight: 650; }
+.connection .mono { font-size: 12px; font-weight: 600; }
+.eyebrow { font-size: 11px; font-weight: 650; }
+.intro h1 { font-size: 31px; font-weight: 800; letter-spacing: .2px; }
+.intro p { font-size: 15px; font-weight: 500; }
+.local-chip { font-size: 11px; font-weight: 600; color: #657961; }
+.stats article > span { font-size: 14px; font-weight: 650; }
+.stats strong { font-size: 35px; font-weight: 750; letter-spacing: -.6px; }
+.stats small { font-size: 12px; font-weight: 500; line-height: 1.65; }
+.progress { top: 68px; }
+.filters label { font-size: 13px; font-weight: 650; gap: 6px; }
+.filters input, .filters select { font-size: 14px; font-weight: 500; min-height: 44px; }
+.filter-primary > button { height: 44px; font-size: 13px; font-weight: 650; }
+.advanced summary { max-width: 240px; font-size: 13px; font-weight: 600; }
+.sample-browser .sample-list-header h2 { font-size: 17px; font-weight: 750; }
+.sample-list-header h2 span { font-size: 13px; font-weight: 600; }
+.sample-list-header > .muted { font-size: 12px; font-weight: 500; }
+.card-info { padding: 15px; }
+.card-heading { align-items: flex-start; }
+.card-heading strong { font-size: 16px; font-weight: 750; }
+.card-dataset { font-size: 12px; font-weight: 550; }
+.card-id { font-size: 12px; font-weight: 550; line-height: 1.75; min-height: 42px; margin-top: 4px; }
+.badge { font-size: 12px; font-weight: 700; padding: 3px 8px; }
+.card-view-count { font-size: 11px; font-weight: 650; }
+.card-judgments { font-size: 12px; font-weight: 500; gap: 10px; }
+.card-judgments b { font-weight: 750; }
+.sample-browser .pagination button, .sample-browser .pagination label, .pagination span, .pagination input { font-size: 13px; font-weight: 600; }
+.sample-browser .pagination button { padding: 7px 13px; }
+.sample-dialog-bar h2 { font-size: 18px; font-weight: 750; }
+.sample-dialog-bar > .muted { font-size: 13px; }
+.sample-dialog .detail-title-line h2 { font-size: 20px; font-weight: 750; }
+.detail-id { font-size: 13px; font-weight: 550; }
+.detail-meta { font-size: 13px; font-weight: 550; line-height: 1.8; }
+.detail-nav button { font-size: 13px; font-weight: 650; }
+.section-bar h2 { font-size: 16px; font-weight: 750; }
+.section-bar .muted { font-size: 12px; font-weight: 550; }
+.section-bar button { font-size: 12px; font-weight: 650; }
+.view-tabs button { font-size: 12px; font-weight: 650; }
+.image-label { font-size: 14px; font-weight: 700; flex-wrap: wrap; }
+.image-label small { font-size: 11px; font-weight: 550; }
+.image-note, .image-path { font-size: 12px; font-weight: 500; }
+.tag-title { font-size: 13px; font-weight: 700; }
+.tag-title small { font-size: 12px; font-weight: 550; }
+.sample-dialog .think-text { font-size: 16px; font-weight: 500; line-height: 1.9; }
+.tag-block pre, .raw-json { font-size: 12px; font-weight: 500; line-height: 1.8; }
+.tag-inline code { font-size: 12px; font-weight: 600; }
+.tag-inline b { font-size: 15px; font-weight: 750; }
+.source-details { font-size: 13px; font-weight: 550; }
+.judgment-heading h3 { font-size: 16px; font-weight: 750; }
+.judgment-badge { font-size: 14px; font-weight: 750; padding: 4px 11px; }
+.judgment-section p { font-size: 16px; font-weight: 550; line-height: 1.95; }
+.short-evaluation-note, .historical-note { font-size: 12px; font-weight: 500; }
+.score-box span, .score-box small, .confidence { font-size: 12px; }
+.score-box strong { font-weight: 750; }
+.eval-summary, .dimension > p, .issue, .issue blockquote { font-size: 14px; font-weight: 500; }
+.dimension h3 { font-size: 15px; font-weight: 750; }
+.check { grid-template-columns: 96px 1fr; font-size: 13px; line-height: 1.85; }
+.check-verdict, .issue-top { font-size: 12px; font-weight: 650; }
+.empty, .pending-state p, .error-state, .load-error { font-size: 14px; font-weight: 500; }
+.pending-state h3 { font-size: 16px; font-weight: 750; }
+.review-body { grid-template-columns: 170px 1fr auto; }
+.review-body label { font-size: 13px; font-weight: 650; }
+.review-body select, .review-body textarea { font-size: 14px; font-weight: 500; }
+.review-body button { font-size: 14px; font-weight: 700; }
+.guide h2 { font-size: 20px; font-weight: 750; }
+.guide-grid p { font-size: 14px; font-weight: 500; }
+.guide-grid strong { font-weight: 750; }
+.guide > .muted { font-size: 12px; font-weight: 500; }
+footer { font-size: 12px; font-weight: 550; flex-wrap: wrap; align-items: center; gap: 12px; }
+.background-toggle { font-size: 12px; font-weight: 600; padding: 5px 10px; background: #ffffffc9; }
+.background-toggle:disabled { opacity: .7; }
+.dialog-head { font-size: 14px; font-weight: 650; }
+.dialog-head button { font-weight: 650; }
+#ambient-background { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .86; }
+@media (max-width: 1150px) {
+  .topbar { gap: 25px; }
+  .sample-dialog .detail-title-line h2 { font-size: 18px; }
+}
+@media (max-width: 760px) {
+  .topbar { gap: 10px; }
+  .brand { font-size: 22px; gap: 9px; }
+  .brand small { font-size: 10px; }
+  .connection { font-size: 11px; gap: 6px; }
+  .connection .quiet { font-size: 12px; padding: 5px 7px; }
+  .intro h1 { font-size: 25px; }
+  .intro .eyebrow { font-size: 10px; }
+  .intro p { font-size: 13px; }
+  .stats strong { font-size: 30px; }
+  .stats article > span { font-size: 12px; }
+  .stats small { font-size: 11px; }
+  .card-info { padding: 11px; }
+  .card-heading strong { font-size: 14px; }
+  .card-heading .badge { font-size: 10px; padding: 2px 6px; }
+  .card-id { font-size: 11px; }
+  .card-dataset, .card-judgments { font-size: 11px; }
+  .sample-browser .sample-list-header > .muted { font-size: 11px; max-width: 140px; }
+  .sample-browser .pagination button, .sample-browser .pagination label { font-size: 12px; }
+  .sample-dialog .detail-title-line h2 { font-size: 17px; }
+  .sample-dialog .think-text, .judgment-section p { font-size: 15px; }
+  .judgment-heading h3 { font-size: 15px; }
+  .review-body { grid-template-columns: 1fr; }
+  .guide-grid p { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sample-card { transition: none; }
+  .sample-card:hover { transform: none; }
+}
